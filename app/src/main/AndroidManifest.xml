@@ -11,6 +11,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".ViewEventActivity" />
+        <activity android:name=".EditEventActivity"></activity>
+        <activity android:name=".CreateEventActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

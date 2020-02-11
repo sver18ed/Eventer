@@ -3,4 +3,9 @@
     <string name="upcoming_events">Upcoming Events</string>
     <string name="create">Create</string>
     <string name="login">Login</string>
+    <string name="join_button">Join</string>
+    <string name="edit_button">Edit</string>
+    <string name="save">Save</string>
+    <string name="content">Content:</string>
+    <string name="title">Title:</string>
 </resources>
