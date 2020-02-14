@@ -2,26 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/return_button_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/password_login"
-        android:layout_width="191dp"
-        android:layout_height="59dp"
+        android:layout_width="272dp"
+        android:layout_height="54dp"
         android:ems="10"
         android:hint="@string/password_login"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/username_login"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/username_login"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/return_button"
         android:layout_width="67dp"
         android:layout_height="70dp"
         android:contentDescription="@string/return_button"
@@ -35,15 +35,46 @@
 
     <EditText
         android:id="@+id/username_login"
-        android:layout_width="191dp"
+        android:layout_width="276dp"
         android:layout_height="59dp"
         android:ems="10"
         android:hint="@string/user_login"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintVertical_bias="0.407" />
+
+    <TextView
+        android:id="@+id/register_text"
+        android:layout_width="255dp"
+        android:layout_height="45dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="none"
+        android:text="@string/not_registered"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.774" />
+
+    <Button
+        android:id="@+id/create_account_button"
+        android:layout_width="260dp"
+        android:layout_height="51dp"
+        android:text="@string/create_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.864" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

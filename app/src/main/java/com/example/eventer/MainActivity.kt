@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listView = findViewById<ListView>(R.id.main_listview)
+        val listView = findViewById<ListView>(R.id.main_listView)
         listView.adapter = ArrayAdapter<Events>(
             this,
             android.R.layout.simple_list_item_1,

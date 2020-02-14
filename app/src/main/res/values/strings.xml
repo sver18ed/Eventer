@@ -11,4 +11,10 @@
     <string name="save">Save</string>
     <string name="content">Content:</string>
     <string name="title">Title:</string>
+    <string name="create_account">Create Account</string>
+    <string name="not_registered">Not registered?</string>
+    <string name="confirm">Confirm</string>
+    <string name="email">Email</string>
+    <string name="i_agree">I agree</string>
+    <string name="ok">Ok</string>
 </resources>
