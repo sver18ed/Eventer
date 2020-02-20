@@ -6,4 +6,127 @@
     android:layout_height="match_parent"
     tools:context=".ViewProfile">
 
+    <ImageButton
+        android:id="@+id/return_button"
+        android:layout_width="67dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/return_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024"
+        app:srcCompat="?attr/homeAsUpIndicator" />
+
+    <TextView
+        android:id="@+id/profile_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/return_button"
+        android:text="@string/profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:text="@string/name_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/return_button"
+        android:paddingEnd="25dp"
+        android:paddingRight="25dp"
+        />
+
+    <TextView
+        android:id="@+id/actual_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/actual_name"
+        app:layout_constraintStart_toEndOf="@id/name_header"
+        app:layout_constraintBottom_toBottomOf="@id/name_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/email_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/email_header"
+        app:layout_constraintTop_toBottomOf="@id/name_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/name_header"
+        />
+
+    <TextView
+        android:id="@+id/actual_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/actual_email"
+        app:layout_constraintStart_toEndOf="@id/email_header"
+        app:layout_constraintBottom_toBottomOf="@id/email_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/info_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/info_header"
+        app:layout_constraintTop_toBottomOf="@id/email_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/name_header"
+        />
+
+    <TextView
+        android:id="@+id/actual_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/actual_info"
+        app:layout_constraintStart_toEndOf="@id/info_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actual_email"
+        />
+
+    <Button
+        android:id="@+id/add_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/add_friend_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_in_center"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/edit_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_in_center" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline_vertical_in_center"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+
+
+
+
+
+
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

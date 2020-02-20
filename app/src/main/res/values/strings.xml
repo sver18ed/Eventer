@@ -17,4 +17,12 @@
     <string name="email">Email</string>
     <string name="i_agree">I agree</string>
     <string name="ok">Ok</string>
+    <string name="profile">Profile</string>
+    <string name="name_header">Name:</string>
+    <string name="actual_name" />
+    <string name="email_header">E-mail:</string>
+    <string name="actual_email" />
+    <string name="actual_info" />
+    <string name="info_header">Info:</string>
+    <string name="add_friend_button">ADD FRIEND</string>
 </resources>
