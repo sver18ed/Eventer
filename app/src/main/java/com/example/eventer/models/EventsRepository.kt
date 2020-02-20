@@ -35,4 +35,20 @@ class EventsRepository {
         events.find {
             it.id == id
         }
+
+    fun deleteEventById(id: Int) =
+        events.remove(
+            events.find {
+                it.id == id
+            }
+        )
+
+    fun updateEventById(id: Int, newTitle: String, newContent: String){
+
+        getEventById(id)?.run{
+            title = newTitle
+            content = newContent
+        }
+
+    }
 }

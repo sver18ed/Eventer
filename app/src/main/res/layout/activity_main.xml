@@ -31,11 +31,11 @@
         android:id="@+id/main_listView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/create"
+        app:layout_constraintBottom_toTopOf="@id/create_button"
         app:layout_constraintTop_toBottomOf="@id/upcoming_events" />
 
     <Button
-        android:id="@+id/create"
+        android:id="@+id/create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create"
