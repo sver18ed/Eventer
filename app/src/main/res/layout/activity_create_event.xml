@@ -13,17 +13,7 @@
         android:text="@string/title"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <TextView
-        android:id="@+id/editTitleTextWatcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTitleText"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/contentText"
@@ -32,45 +22,33 @@
         android:text="@string/content"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTitleTextWatcher"
-        app:layout_constraintBottom_toBottomOf="@id/editContentText"/>
-
-    <TextView
-        android:id="@+id/editContentTextWatcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editContentText"/>
+        app:layout_constraintTop_toBottomOf="@+id/titleText"/>
 
     <EditText
-        android:id="@+id/editTitleText"
+        android:id="@+id/title_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/titleText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:id="@+id/editContentText"
+        android:id="@+id/content_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/contentText"
-        app:layout_constraintTop_toBottomOf="@+id/editTitleTextWatcher"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editContentTextWatcher"/>
+        app:layout_constraintTop_toBottomOf="@id/content_edit_text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

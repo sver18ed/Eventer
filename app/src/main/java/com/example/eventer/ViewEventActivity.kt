@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.example.eventer.models.eventsRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewEventActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_event)
+
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("users").get()
 
         val event = eventsRepository.getEventById(intent.getIntExtra("id", 0))
 
