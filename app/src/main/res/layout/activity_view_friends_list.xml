@@ -6,4 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".ViewFriendsListActivity">
 
+    <ImageButton
+        android:id="@+id/return_button"
+        android:layout_width="67dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/return_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024"
+        app:srcCompat="?attr/homeAsUpIndicator" />
+
+    <TextView
+        android:id="@+id/friends_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/return_button"
+        android:text="@string/friends_list"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/your_friends_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/return_button"
+        android:text="@string/your_friends"
+        android:layout_marginTop="20dp"
+        />
+
+    <ListView
+        android:id="@+id/your_friends_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/your_friends_header"
+        />
+
+    <TextView
+        android:id="@+id/pending_friend_requests_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/your_friends_list"
+        android:text="@string/pending_friend_requests"
+        android:layout_marginTop="20dp"
+        />
+
+    <ListView
+        android:id="@+id/pending_friend_requests_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/pending_friend_requests_header"
+        />
+
+    <Button
+        android:id="@+id/add_friend_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/add_friend_button"
+        android:layout_marginBottom="20dp"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.example.eventer.models.UserRepository
 import com.example.eventer.models.userRepository
 
-class ViewProfile : AppCompatActivity() {
+class ViewProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
