@@ -28,4 +28,6 @@
     <string name="friends_list">Friends</string>
     <string name="your_friends">Your Friends:</string>
     <string name="pending_friend_requests">Pending Requests:</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="show_map">MAP</string>
 </resources>
