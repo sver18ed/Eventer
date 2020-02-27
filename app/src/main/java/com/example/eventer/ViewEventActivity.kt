@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import com.example.eventer.models.eventsRepository
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.eventer.models.Event
 
 class ViewEventActivity : AppCompatActivity() {
 
@@ -18,25 +16,15 @@ class ViewEventActivity : AppCompatActivity() {
         val titleText = findViewById<TextView>(R.id.title_text)
         val contentText = findViewById<TextView>(R.id.content_text)
 
+        val event = intent.extras?.get("event") as Event
 
-        val db = FirebaseFirestore.getInstance()
-
-        val event = db.collection("events")
-            .document(intent.getStringExtra("id"))
-        event.get().addOnSuccessListener {
-            titleText.text = it.getString("title")
-            contentText.text = it.getString("content")
-        }
-
-//        val event = eventsRepository.getEventById(intent.getIntExtra("id", 0))
-
-//        titleText.text = event?.title
-//        contentText.text = event?.content
+        titleText.text = event.title
+        contentText.text = event.content
 
         val editButton = findViewById<Button>(R.id.edit_button)
         editButton.setOnClickListener {
             val intent = Intent(this, EditEventActivity::class.java)
-            intent.putExtra("id", event!!.id)
+            intent.putExtra("event", event)
             startActivity(intent)
         }
     }

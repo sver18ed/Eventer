@@ -3,13 +3,11 @@ package com.example.eventer
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import com.example.eventer.models.Event
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.eventer.models.eventsRepository
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,20 +32,13 @@ class MainActivity : AppCompatActivity() {
                 )
                 val listView = findViewById<ListView>(R.id.main_listView)
                 listView.adapter = adapter
-                listView.setOnItemClickListener {parent, view, position, id ->
+                listView.setOnItemClickListener { _, _, position, _ ->
                     val intent = Intent(this, ViewEventActivity::class.java)
                     intent.putExtra("event", listOfEvents[position])
                     startActivity(intent)
                 }
             }
         }
-
-//        listView.setOnItemClickListener { parent, view, position, id ->
-//            val selectedItem = parent.getItemAtPosition(position) as Events
-//            val intent = Intent(this, ViewEventActivity::class.java)
-//            intent.putExtra("id", selectedItem.id)
-//            startActivity(intent)
-//        }
 
         val createButton = this.findViewById<Button>(R.id.create_button)
         createButton.setOnClickListener {
