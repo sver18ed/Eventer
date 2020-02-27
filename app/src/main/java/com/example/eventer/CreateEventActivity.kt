@@ -3,8 +3,10 @@ package com.example.eventer
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import com.example.eventer.models.eventsRepository
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreateEventActivity : AppCompatActivity() {
@@ -29,9 +31,15 @@ class CreateEventActivity : AppCompatActivity() {
                 "content" to content
             )
 
-            db.collection("events").add(event)
+            db.collection("events")
+                .add(event)
+
+//            val id = eventsRepository.addEvents(title, content)
+
+            val id = db.collection("events").document().id
 
             val intent = Intent(this, ViewEventActivity::class.java)
+            intent.putExtra("id", id)
             startActivity(intent)
             this.finish()
         }
