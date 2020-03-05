@@ -3,12 +3,13 @@
     <string name="upcoming_events">Upcoming Events</string>
     <string name="create">Create</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="return_button">Return to previous activity</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="password">Password</string>
-    <string name="join_button">Join</string>
-    <string name="edit_button">Edit</string>
+    <string name="join">Join</string>
+    <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="content">Content:</string>
     <string name="title">Title:</string>

@@ -48,7 +48,6 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     private fun initialise() {
-
         firstNameEditText = findViewById(R.id.first_name_edit_text)
         lastNameEditText = findViewById(R.id.last_name_edit_text)
         emailEditText = findViewById(R.id.email_edit_text)
@@ -65,7 +64,6 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     private fun createNewAccount() {
-
         firstName = firstNameEditText?.text.toString()
         lastName = lastNameEditText?.text.toString()
         email = emailEditText?.text.toString()
