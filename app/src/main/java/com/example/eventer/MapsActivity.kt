@@ -147,11 +147,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             // 2
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
             // 3
-            if (null != addresses && addresses.isNotEmpty()) {
+            if (null != addresses && !addresses.isEmpty()) {
                 address = addresses[0]
-                for (i in 0 until address.maxAddressLineIndex) {
-                    addressText += if (i == 0) address.getAddressLine(i) else "\n" + address.getAddressLine(i)
-                }
+                addressText = address.getAddressLine(0)
             }
         } catch (e: IOException) {
             Log.e("MapsActivity", e.localizedMessage)
