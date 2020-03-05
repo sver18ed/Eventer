@@ -33,7 +33,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity android:name=".ViewFriendsListActivity" />
-        <activity android:name=".CreateAccount" />
+        <activity android:name=".CreateAccountActivity" />
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ViewEventActivity" />

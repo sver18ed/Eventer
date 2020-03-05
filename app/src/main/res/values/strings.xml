@@ -4,8 +4,9 @@
     <string name="create">Create</string>
     <string name="login">Login</string>
     <string name="return_button">Return to previous activity</string>
-    <string name="user_login">Username</string>
-    <string name="password_login">Password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="password">Password</string>
     <string name="join_button">Join</string>
     <string name="edit_button">Edit</string>
     <string name="save">Save</string>
@@ -13,7 +14,6 @@
     <string name="title">Title:</string>
     <string name="create_account">Create Account</string>
     <string name="not_registered">Not registered?</string>
-    <string name="confirm">Confirm</string>
     <string name="email">Email</string>
     <string name="i_agree">I agree</string>
     <string name="ok">Ok</string>

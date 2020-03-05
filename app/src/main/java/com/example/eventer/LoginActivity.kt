@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
         }
         val createAccountButton = this.findViewById<Button>(R.id.create_account_button)
         createAccountButton.setOnClickListener{
-            val intent = Intent(this, CreateAccount::class.java)
+            val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
         }
     }
