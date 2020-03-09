@@ -2,6 +2,7 @@ package com.example.eventer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -11,7 +12,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListener {
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private val TAG = "MainActivity"
 
@@ -36,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (savedInstanceState == null) {
+            val manager = supportFragmentManager
+            val transaction = manager.beginTransaction()
+            transaction.replace(R.id.test_map, MapFragment.newInstance())
+            transaction.commit()
+        }
+
         initialise()
     }
 
@@ -44,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         createEventButton = findViewById(R.id.create_event_button)
         loginButton = findViewById(R.id.login_button)
         logoutButton = findViewById(R.id.logout_button)
-        mapButton = findViewById(R.id.map_button)
         loggedInText = findViewById(R.id.logged_in_text)
         eventsListView = findViewById(R.id.events_list_view)
 
@@ -71,10 +82,6 @@ class MainActivity : AppCompatActivity() {
         logoutButton!!.setOnClickListener {
             auth!!.signOut()
             this.recreate()
-        }
-
-        mapButton!!.setOnClickListener {
-            startActivity(Intent(this, MapsActivity::class.java))
         }
 
         eventsListView!!.setOnItemClickListener { _, _, position, _ ->
