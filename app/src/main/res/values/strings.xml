@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Eventer</string>
     <string name="upcoming_events">Upcoming Events</string>
-    <string name="create">Create</string>
+    <string name="create_event">Create Event</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="return_button">Return to previous activity</string>

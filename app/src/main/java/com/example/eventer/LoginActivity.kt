@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
     private var createAccountButton: Button? = null
 
     //Firebase references
-    private var mAuth: FirebaseAuth? = null
+    private var auth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +47,10 @@ class LoginActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.login_button)
         createAccountButton = findViewById(R.id.create_account_button)
 
-        mAuth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         createAccountButton!!.setOnClickListener {
-            startActivity(Intent(this@LoginActivity, CreateAccountActivity::class.java))
+            startActivity(Intent(this, CreateAccountActivity::class.java))
         }
 
         loginButton!!.setOnClickListener {
@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
         password = passwordEditText?.text.toString()
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             Log.d(TAG, "Logging in user.")
-            mAuth!!.signInWithEmailAndPassword(email!!, password!!)
+            auth!!.signInWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with signed-in user's information
@@ -72,17 +72,24 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.e(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(this@LoginActivity, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         } else {
-            Toast.makeText(this, "You must enter all fields...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "You must enter all fields...",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun updateUI() {
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

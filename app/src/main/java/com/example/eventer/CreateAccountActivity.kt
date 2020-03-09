@@ -25,9 +25,9 @@ class CreateAccountActivity : AppCompatActivity() {
     private var createAccountButton: Button? = null
 
     //Firebase references
-    private var mDatabaseCollectionReference: CollectionReference? = null
-    private var mDatabase: FirebaseFirestore? = null
-    private var mAuth: FirebaseAuth? = null
+    private var firestore: FirebaseFirestore? = null
+    private var usersCollection: CollectionReference? = null
+    private var auth: FirebaseAuth? = null
 
     //Global variables
     private var firstName: String? = null
@@ -52,11 +52,11 @@ class CreateAccountActivity : AppCompatActivity() {
         lastNameEditText = findViewById(R.id.last_name_edit_text)
         emailEditText = findViewById(R.id.email_edit_text)
         passwordEditText = findViewById(R.id.password_edit_text)
-        createAccountButton = findViewById(R.id.create_button)
+        createAccountButton = findViewById(R.id.create_event_button)
 
-        mDatabase = FirebaseFirestore.getInstance()
-        mDatabaseCollectionReference = mDatabase!!.collection("users")
-        mAuth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+        usersCollection = firestore!!.collection("users")
+        auth = FirebaseAuth.getInstance()
 
         createAccountButton!!.setOnClickListener {
             createNewAccount()
@@ -72,15 +72,13 @@ class CreateAccountActivity : AppCompatActivity() {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)
             && !TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) {
 
-            mAuth!!
-                .createUserWithEmailAndPassword(email!!, password!!)
+            auth!!.createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener(this) { task ->
-                    //mProgressBar!!.hide()
                     if (task.isSuccessful) {
                         Log.d(TAG, "createUserWithEmail:success")
-                        val userId = mAuth!!.currentUser!!.uid
+                        val userId = auth!!.currentUser!!.uid
                         //update user profile information
-                        val currentUserDb = mDatabaseCollectionReference!!.document(email!!)
+                        val currentUserDb = usersCollection!!.document(email!!)
                         val user = hashMapOf(
                             "userId" to userId,
                             "firstName" to firstName,
@@ -91,22 +89,24 @@ class CreateAccountActivity : AppCompatActivity() {
                         currentUserDb.set(user)
                         updateUserInfoAndUI()
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         Toast.makeText(
-                            this@CreateAccountActivity, "Authentication failed.",
+                            this,
+                            "Authentication failed.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
-
         } else {
-            Toast.makeText(this, "You must enter all fields...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "You must enter all fields...",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun updateUserInfoAndUI() {
-        //start next activity
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)

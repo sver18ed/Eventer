@@ -46,10 +46,10 @@
         app:layout_constraintStart_toStartOf="@+id/last_name_edit_text" />
 
     <Button
-        android:id="@+id/create_button"
+        android:id="@+id/create_event_button"
         android:layout_width="165dp"
         android:layout_height="53dp"
-        android:text="@string/create"
+        android:text="@string/create_event"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,84 +3,126 @@ package com.example.eventer
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.util.Log
+import android.widget.*
 import com.example.eventer.models.Event
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
+
+    private val TAG = "MainActivity"
+
+    //UI elements
+    private var createEventButton: Button? = null
+    private var loginButton: Button? = null
+    private var logoutButton: Button? = null
+    private var mapButton: Button? = null
+    private var loggedInText: TextView? = null
+    private var eventsListView: ListView? = null
+
+    //Firebase references
+    private var firestore: FirebaseFirestore? = null
+    private var eventsCollection: CollectionReference? = null
+    private var auth: FirebaseAuth? = null
+    private var currentUser: FirebaseUser? = null
+
+    //Global variables
+    private var listOfEvents: ArrayList<Event>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = FirebaseFirestore.getInstance()
+        initialise()
+    }
 
-        val mAuth = FirebaseAuth.getInstance()
-        val mUser = mAuth.currentUser
+    private fun initialise() {
+        //Initialising UIs
+        createEventButton = findViewById(R.id.create_event_button)
+        loginButton = findViewById(R.id.login_button)
+        logoutButton = findViewById(R.id.logout_button)
+        mapButton = findViewById(R.id.map_button)
+        loggedInText = findViewById(R.id.logged_in_text)
+        eventsListView = findViewById(R.id.events_list_view)
 
-        val loggedInText = findViewById<TextView>(R.id.logged_in_text)
+        firestore = FirebaseFirestore.getInstance()
+        eventsCollection = firestore!!.collection("events")
+        auth = FirebaseAuth.getInstance()
+        currentUser = auth!!.currentUser
 
-        if (mAuth.currentUser != null) {
-            loggedInText.text = "Logged in as: "+mUser?.email
-        } else {
-            loggedInText.text = "No user signed in"
+        populateEventsListView()
+
+        createEventButton!!.setOnClickListener {
+            if (auth!!.currentUser == null) {
+                startActivity(Intent(this, LoginActivity::class.java
+                ).putExtra("message", "Please login to create event!"))
+            } else {
+                startActivity(Intent(this, CreateEventActivity::class.java))
+            }
         }
 
-        val events = db.collection("events")
-        events.get().addOnCompleteListener { task ->
+        loginButton!!.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+        logoutButton!!.setOnClickListener {
+            auth!!.signOut()
+            this.recreate()
+        }
+
+        mapButton!!.setOnClickListener {
+            startActivity(Intent(this, MapsActivity::class.java))
+        }
+
+        eventsListView!!.setOnItemClickListener { _, _, position, _ ->
+            Log.e(TAG, listOfEvents!![position].id)
+            startActivity(Intent(this, ViewEventActivity::class.java
+            ).putExtra("id", listOfEvents!![position].id))
+        }
+    }
+
+    private fun populateEventsListView() {
+        eventsCollection!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val listOfEvents = ArrayList<Event>()
+                Log.e(TAG, "eventsCollection.get():success")
+                listOfEvents = ArrayList()
                 for (e in task.result!!) {
                     val event = e.toObject(Event::class.java)
-                    listOfEvents.add(event)
+                    listOfEvents!!.add(event)
                 }
                 val adapter = ArrayAdapter(
                     this,
                     android.R.layout.simple_list_item_1,
-                    listOfEvents
+                    listOfEvents!!
                 )
-                val listView = findViewById<ListView>(R.id.main_listView)
-                listView.adapter = adapter
-                listView.setOnItemClickListener { _, _, position, _ ->
-                    val intent = Intent(this, ViewEventActivity::class.java)
-                    intent.putExtra("event", listOfEvents[position])
-                    startActivity(intent)
-                }
+                eventsListView?.adapter = adapter
+            }
+            else {
+                Log.e(TAG, "eventsCollection.get():failure", task.exception)
+                Toast.makeText(
+                    this,
+                    "Couldn't fetch list of events from server",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
-
-        val createButton = this.findViewById<Button>(R.id.create_button)
-        createButton.setOnClickListener {
-            val intent = Intent(this, CreateEventActivity::class.java)
-            startActivity(intent)
-        }
-
-        val loginButton = this.findViewById<Button>(R.id.login_button)
-        loginButton.setOnClickListener{
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        val logoutButton = this.findViewById<Button>(R.id.logout_button)
-        logoutButton.setOnClickListener{
-            mAuth.signOut()
-            this.recreate()
-        }
-
-        val mapButton = this.findViewById<Button>(R.id.map_button)
-        mapButton.setOnClickListener{
-            val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent)
-        }
-
     }
 
     override fun onRestart() {
         super.onRestart()
         this.recreate()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (auth!!.currentUser != null) {
+            loggedInText!!.text = "Logged in as: "+currentUser!!.email
+        } else {
+            loggedInText!!.text = "No user signed in"
+        }
     }
 }
