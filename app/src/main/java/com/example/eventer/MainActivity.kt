@@ -1,18 +1,19 @@
 package com.example.eventer
 
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
 import android.widget.*
-import com.example.eventer.models.Event
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    MapFragment.OnFragmentInteractionListener {
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -20,116 +21,67 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 
     private val TAG = "MainActivity"
 
-    //UI elements
-    private var createEventButton: Button? = null
-    private var loginButton: Button? = null
-    private var logoutButton: Button? = null
-    private var mapButton: Button? = null
-    private var loggedInText: TextView? = null
-    private var eventsListView: ListView? = null
+    //Fragments
+    private val fragmentManager = supportFragmentManager
+    private val mainFragment = MainFragment()
 
-    //Firebase references
-    private var firestore: FirebaseFirestore? = null
-    private var eventsCollection: CollectionReference? = null
-    private var auth: FirebaseAuth? = null
-    private var currentUser: FirebaseUser? = null
-
-    //Global variables
-    private var listOfEvents: ArrayList<Event>? = null
+    //Navigation
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+    lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null) {
-            val manager = supportFragmentManager
-            val transaction = manager.beginTransaction()
-            transaction.replace(R.id.test_map, MapFragment.newInstance())
-            transaction.commit()
-        }
+        toolbar = findViewById(R.id.toolbar)
+        this.setSupportActionBar(toolbar)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, 0, 0
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        navView.setNavigationItemSelectedListener(this)
 
         initialise()
     }
 
     private fun initialise() {
-        //Initialising UIs
-        createEventButton = findViewById(R.id.create_event_button)
-        loginButton = findViewById(R.id.login_button)
-        logoutButton = findViewById(R.id.logout_button)
-        loggedInText = findViewById(R.id.logged_in_text)
-        eventsListView = findViewById(R.id.events_list_view)
+        /* Display First Fragment initially */
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.myFragment, mainFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 
-        firestore = FirebaseFirestore.getInstance()
-        eventsCollection = firestore!!.collection("events")
-        auth = FirebaseAuth.getInstance()
-        currentUser = auth!!.currentUser
-
-        populateEventsListView()
-
-        createEventButton!!.setOnClickListener {
-            if (auth!!.currentUser == null) {
-                startActivity(Intent(this, LoginActivity::class.java
-                ).putExtra("message", "Please login to create event!"))
-            } else {
-                startActivity(Intent(this, CreateEventActivity::class.java))
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_profile -> {
+                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_messages -> {
+                Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_friends -> {
+                Toast.makeText(this, "Friends clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_update -> {
+                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_logout -> {
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
             }
         }
-
-        loginButton!!.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-
-        logoutButton!!.setOnClickListener {
-            auth!!.signOut()
-            this.recreate()
-        }
-
-        eventsListView!!.setOnItemClickListener { _, _, position, _ ->
-            Log.e(TAG, listOfEvents!![position].id)
-            startActivity(Intent(this, ViewEventActivity::class.java
-            ).putExtra("id", listOfEvents!![position].id))
-        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
-    private fun populateEventsListView() {
-        eventsCollection!!.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.e(TAG, "eventsCollection.get():success")
-                listOfEvents = ArrayList()
-                for (e in task.result!!) {
-                    val event = e.toObject(Event::class.java)
-                    listOfEvents!!.add(event)
-                }
-                val adapter = ArrayAdapter(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    listOfEvents!!
-                )
-                eventsListView?.adapter = adapter
-            }
-            else {
-                Log.e(TAG, "eventsCollection.get():failure", task.exception)
-                Toast.makeText(
-                    this,
-                    "Couldn't fetch list of events from server",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        this.recreate()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (currentUser != null) {
-            loggedInText!!.text = "Logged in as: "+currentUser!!.email
-        } else {
-            loggedInText!!.text = "No user signed in"
-        }
-    }
+//    override fun onRestart() {
+//        super.onRestart()
+//        this.recreate()
+//    }
 }

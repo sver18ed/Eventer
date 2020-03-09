@@ -31,6 +31,7 @@
 
         <activity
             android:name=".MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_maps"></activity>
         <activity android:name=".ViewFriendsListActivity" />
         <activity android:name=".CreateAccountActivity" />
