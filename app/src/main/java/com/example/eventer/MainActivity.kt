@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        if (auth!!.currentUser != null) {
+        if (currentUser != null) {
             loggedInText!!.text = "Logged in as: "+currentUser!!.email
         } else {
             loggedInText!!.text = "No user signed in"

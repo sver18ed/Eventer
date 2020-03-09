@@ -22,6 +22,7 @@ class ViewEventActivity : AppCompatActivity() {
     //UI elements
     private var titleText: TextView? = null
     private var contentText: TextView? = null
+    private var createdByText: TextView? = null
     private var editEventButton: Button? = null
 
     //Firebase references
@@ -46,6 +47,7 @@ class ViewEventActivity : AppCompatActivity() {
 
         titleText = findViewById(R.id.title_text)
         contentText = findViewById(R.id.content_text)
+        createdByText = findViewById(R.id.created_by_text)
         editEventButton = findViewById(R.id.edit_event_button)
 
         firestore = FirebaseFirestore.getInstance()
@@ -72,6 +74,7 @@ class ViewEventActivity : AppCompatActivity() {
 
                 titleText!!.text = event!!.title
                 contentText!!.text = event!!.content
+                createdByText!!.text = event!!.created_by
             }
             else {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)

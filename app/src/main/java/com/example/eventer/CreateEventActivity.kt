@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -24,7 +25,9 @@ class CreateEventActivity : AppCompatActivity() {
     //Firebase references
     private var firestore: FirebaseFirestore? = null
     private var eventsCollection: CollectionReference? = null
+    private var usersCollection: CollectionReference? = null
     private var auth: FirebaseAuth? = null
+    private var currentUser: FirebaseUser? = null
 
     //Global variables
     private var id: String? = null
@@ -45,7 +48,9 @@ class CreateEventActivity : AppCompatActivity() {
 
         firestore = FirebaseFirestore.getInstance()
         eventsCollection = firestore!!.collection("events")
+        usersCollection = firestore!!.collection("users")
         auth = FirebaseAuth.getInstance()
+        currentUser = auth!!.currentUser
 
         saveButton!!.setOnClickListener {
             createNewEvent()
@@ -57,16 +62,18 @@ class CreateEventActivity : AppCompatActivity() {
         title = titleEditText?.text.toString()
         content = contentEditText?.text.toString()
 
-        if (auth!!.currentUser == null) {
+        if (currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java
             ).putExtra("message", "Please login to create event!"))
         }
 
         else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+
             val event = hashMapOf(
                 "id" to id,
                 "title" to title,
-                "content" to content
+                "content" to content,
+                "created_by" to currentUser!!.email
             )
 
             eventsCollection!!.document(id!!).set(event).addOnCompleteListener { task ->

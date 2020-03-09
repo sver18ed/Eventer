@@ -5,7 +5,8 @@ import java.io.Serializable
 class Event(
     val id: String = "",
     val title: String = "",
-    val content: String = ""
+    val content: String = "",
+    val created_by: String = ""
 ) : Serializable
 
 {
