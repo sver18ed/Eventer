@@ -7,6 +7,7 @@ class Event(
     val title: String = "",
     val content: String = "",
     val created_by: String = ""
+
 ) : Serializable
 
 {

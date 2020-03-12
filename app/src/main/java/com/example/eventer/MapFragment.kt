@@ -48,6 +48,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var listener: OnFragmentInteractionListener? = null
 
 
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -82,8 +83,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         createLocationRequest()
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -92,6 +91,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.fragment_map) as? SupportMapFragment
@@ -100,9 +100,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
+
 
         setUpMap()
     }
@@ -133,7 +133,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         map.isMyLocationEnabled = true
 
         map.mapType = GoogleMap.MAP_TYPE_HYBRID
-
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             // Got last known location. In some rare situations this can be null.
@@ -232,8 +231,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -247,8 +244,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         super.onDetach()
         listener = null
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -265,10 +260,4 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
-
-
-
-
-
-
 }

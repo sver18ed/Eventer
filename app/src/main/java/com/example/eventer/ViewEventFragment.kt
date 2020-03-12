@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
@@ -41,6 +42,7 @@ class ViewEventFragment : Fragment() {
     //Global variables
     private var event: Event? = null
     private var id: String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,6 +97,7 @@ class ViewEventFragment : Fragment() {
                 titleText!!.text = event!!.title
                 contentText!!.text = event!!.content
                 createdByText!!.text = event!!.created_by
+
             }
             else {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
@@ -105,5 +108,11 @@ class ViewEventFragment : Fragment() {
                 ).show()
             }
         }
+    }
+    private fun startMap() {
+
+        val transaction = fragmentManager!!.beginTransaction()
+        transaction.replace(R.id.test_map, MapFragment.newInstance())
+        transaction.commit()
     }
 }
