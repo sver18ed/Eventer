@@ -80,12 +80,14 @@ class ViewEventFragment : Fragment() {
             editEventFragment.arguments = args
 
             val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.addToBackStack(null)
             fragmentTransaction.replace(R.id.myFragment, editEventFragment)
             fragmentTransaction.commit()
 
 //            startActivity(Intent(activity, EditEventActivity::class.java
 //            ).putExtra("event", event))
         }
+        startMap()
     }
 
     private fun getEventFromFirestore() {

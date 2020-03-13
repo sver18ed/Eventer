@@ -84,6 +84,7 @@ class MainFragment : Fragment() {
             } else {
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
                 fragmentTransaction.replace(R.id.myFragment, createEventFragment!!)
+                fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
         }
@@ -104,6 +105,7 @@ class MainFragment : Fragment() {
             viewEventFragment!!.arguments = args
 
             val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.addToBackStack(null)
             fragmentTransaction.replace(R.id.myFragment, viewEventFragment!!)
             fragmentTransaction.commit()
         }

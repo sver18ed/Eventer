@@ -35,6 +35,7 @@ class CreateEventFragment : Fragment() {
 
     //Fragments
     private val viewEventFragment = ViewEventFragment()
+    private val mapFragment = MapFragment()
 
     //UI elements
     private var titleEditText: EditText? = null
@@ -95,7 +96,6 @@ class CreateEventFragment : Fragment() {
             createNewEvent()
         }
         startMap()
-
         initializePlaces()
     }
 
@@ -119,7 +119,6 @@ class CreateEventFragment : Fragment() {
                 "title" to title,
                 "content" to content,
                 "created_by" to currentUser!!.email
-
 
             )
 
@@ -187,9 +186,12 @@ class CreateEventFragment : Fragment() {
     }
 
     private fun startMap() {
+        val args = Bundle()
+        args.putParcelable("placeLatLng", placeLatLng)
+        mapFragment.arguments = args
 
         val transaction = fragmentManager!!.beginTransaction()
-        transaction.replace(R.id.test_map, MapFragment.newInstance())
+        transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()
     }
 }

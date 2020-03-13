@@ -46,6 +46,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var locationRequest: LocationRequest
     private var locationUpdateState = false
     private var listener: OnFragmentInteractionListener? = null
+    private var placeLatLng: LatLng? = null
+
 
 
 
@@ -91,6 +93,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        placeLatLng = arguments?.getParcelable("placeLatLng")
 
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager
@@ -105,6 +108,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
         setUpMap()
+        if (placeLatLng != null) {
+            val createNewLocation: LatLng? = placeLatLng
+            placeMarkerOnMap(LatLng(createNewLocation!!.latitude, createNewLocation!!.longitude))
+        }
     }
 
     override fun onPause() {
@@ -134,6 +141,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         map.mapType = GoogleMap.MAP_TYPE_HYBRID
 
+
+
+
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
@@ -145,14 +155,17 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-    private fun placeMarkerOnMap(location: LatLng) {
+    private fun placeMarkerOnMap(location: LatLng ) {
         val markerOptions = MarkerOptions().position(location)
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
+
         val titleStr = getAddress(location)
         markerOptions.title(titleStr)
+        markerOptions.snippet(titleStr)
 
         map.addMarker(markerOptions)
+        
     }
 
     private fun getAddress(latLng: LatLng): String {

@@ -13,15 +13,25 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
 class EditEventFragment : Fragment() {
 
     private val TAG = "EditEventFragment"
+
+    private lateinit var placesClient: PlacesClient
 
     //UI elements
     private var titleEditText: EditText? = null
@@ -39,6 +49,12 @@ class EditEventFragment : Fragment() {
     private var id: String? = null
     private var title: String? = null
     private var content: String? = null
+
+    //Global variables for places
+    private var placeLatLng: LatLng? = null
+    private var placeName: String? = null
+    private var placeId: String? = null
+    private var placeAddress: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +88,8 @@ class EditEventFragment : Fragment() {
         saveButton!!.setOnClickListener {
             updateEvent()
         }
+        startMap()
+        initializePlaces()
     }
 
     private fun getEventFromFirestore() {
@@ -128,5 +146,47 @@ class EditEventFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun initializePlaces() {
+
+        val apiKey = getString(R.string.google_maps_key)
+        if (!Places.isInitialized()){
+            Places.initialize(context!!, apiKey )
+        }
+        placesClient = Places.createClient(context!!)
+
+        var autocompleteSupportFragment: AutocompleteSupportFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+
+        autocompleteSupportFragment.setPlaceFields(
+            Arrays.asList(
+                Place.Field.ID, Place.Field.LAT_LNG,
+                Place.Field.NAME
+            ))
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
+
+            override fun onPlaceSelected(place: Place) {
+
+                placeLatLng = place.latLng
+                placeName = place.name
+                placeId = place.id
+                placeAddress = place.address
+
+                Log.e("PlaceApi","onPlaceSelected: "+placeLatLng?.latitude+"\n"+placeLatLng?.longitude)
+            }
+
+            override fun onError(p0: Status) {
+                Log.e("PlaceApi", "Error") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+    }
+
+    private fun startMap() {
+
+        val transaction = fragmentManager!!.beginTransaction()
+        transaction.replace(R.id.test_map, MapFragment.newInstance())
+        transaction.commit()
     }
 }

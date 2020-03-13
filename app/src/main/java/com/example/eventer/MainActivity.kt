@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity(),
         /* Display First Fragment initially */
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.myFragment, mainFragment)
-        transaction.addToBackStack(null)
         transaction.commit()
     }
 
