@@ -4,78 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateEventActivity">
-
-    <TextView
-        android:id="@+id/title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/content_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/content"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_text"/>
-
-    <TextView
-        android:id="@+id/address_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/address"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_text"/>
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/title_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
+        android:hint="@string/title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/title_text"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/content_edit_text"
+        android:id="@+id/start_date_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="date"
+        android:hint="@string/start_date"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_centre"
+        app:layout_constraintTop_toBottomOf="@id/title_edit_text" />
+
+    <EditText
+        android:id="@+id/end_date_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="@string/end_date"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_centre"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/content_text"
-        app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
+        app:layout_constraintTop_toBottomOf="@id/title_edit_text" />
+
+    <EditText
+        android:id="@+id/start_time_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:hint="@string/start_time"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_centre"
+        app:layout_constraintTop_toBottomOf="@id/start_date_edit_text" />
+
+    <EditText
+        android:id="@+id/end_time_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:hint="@string/end_time"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_centre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/end_date_edit_text" />
+
+    <EditText
+        android:id="@+id/description_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:hint="@string/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_time_edit_text" />
 
     <FrameLayout
         android:id="@+id/address_frame_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="@string/location"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/address_text"
-        app:layout_constraintTop_toBottomOf="@+id/content_edit_text"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/description_edit_text">
 
-        <fragment
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:id="@+id/autocomplete_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+    <fragment
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:id="@+id/autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     </FrameLayout>
-
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline_horizontal_centre"/>
 
     <FrameLayout
         android:id="@+id/test_map"
@@ -84,7 +93,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_centre" />
+        app:layout_constraintBottom_toTopOf="@id/save_button"
+        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_centre"/>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_horizontal_centre"
@@ -92,5 +111,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintGuide_percent="0.5"
         android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_centre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.5"
+        android:orientation="vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

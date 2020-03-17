@@ -1,6 +1,5 @@
 package com.example.eventer
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
@@ -21,7 +19,6 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,7 +32,7 @@ class EditEventFragment : Fragment() {
 
     //UI elements
     private var titleEditText: EditText? = null
-    private var contentEditText: EditText? = null
+    private var descriptionEditText: EditText? = null
     private var saveButton: Button? = null
 
     //Firebase references
@@ -48,7 +45,7 @@ class EditEventFragment : Fragment() {
     private var event: Event? = null
     private var id: String? = null
     private var title: String? = null
-    private var content: String? = null
+    private var description: String? = null
 
     //Global variables for places
     private var placeLatLng: LatLng? = null
@@ -75,7 +72,7 @@ class EditEventFragment : Fragment() {
         id = arguments?.getString("id")
 
         titleEditText = view!!.findViewById(R.id.title_edit_text)
-        contentEditText = view!!.findViewById(R.id.content_edit_text)
+        descriptionEditText = view!!.findViewById(R.id.description_edit_text)
         saveButton = view!!.findViewById(R.id.save_button)
 
         firestore = FirebaseFirestore.getInstance()
@@ -99,7 +96,7 @@ class EditEventFragment : Fragment() {
                 event = task.result!!.toObject(Event::class.java)
 
                 titleEditText!!.setText(event?.title)
-                contentEditText!!.setText(event?.content)
+                descriptionEditText!!.setText(event?.description)
             }
             else {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
@@ -114,12 +111,12 @@ class EditEventFragment : Fragment() {
 
     private fun updateEvent() {
         title = titleEditText!!.editableText.toString()
-        content = contentEditText!!.editableText.toString()
+        description = descriptionEditText!!.editableText.toString()
 
-        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description)) {
             eventsCollection!!.document(event!!.id).update(mapOf(
                 "title" to title,
-                "content" to content
+                "description" to description
             )).addOnCompleteListener(activity!!) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "update:success")

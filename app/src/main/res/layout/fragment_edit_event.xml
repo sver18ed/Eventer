@@ -16,10 +16,10 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/content_text"
+        android:id="@+id/description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/content"
+        android:text="@string/description"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_text"/>
@@ -28,10 +28,10 @@
         android:id="@+id/address_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/address"
+        android:text="@string/location"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/description_text"/>
 
     <EditText
         android:id="@+id/title_edit_text"
@@ -43,12 +43,12 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:id="@+id/content_edit_text"
+        android:id="@+id/description_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/content_text"
+        app:layout_constraintStart_toEndOf="@+id/description_text"
         app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
 
     <FrameLayout
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/address_text"
-        app:layout_constraintTop_toBottomOf="@+id/content_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/description_edit_text"
         >
 
         <fragment

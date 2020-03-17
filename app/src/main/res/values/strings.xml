@@ -11,8 +11,8 @@
     <string name="join">Join</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
-    <string name="content">Content:</string>
-    <string name="title">Title:</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
     <string name="create_account">Create Account</string>
     <string name="not_registered">Not registered?</string>
     <string name="email">Email</string>
@@ -34,5 +34,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="address">Address:</string>
+    <string name="location">location</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
 </resources>

@@ -8,11 +8,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.eventer.models.Event
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewEventActivity : AppCompatActivity() {
@@ -21,7 +19,7 @@ class ViewEventActivity : AppCompatActivity() {
 
     //UI elements
     private var titleText: TextView? = null
-    private var contentText: TextView? = null
+    private var descriptionText: TextView? = null
     private var createdByText: TextView? = null
     private var editEventButton: Button? = null
 
@@ -46,7 +44,7 @@ class ViewEventActivity : AppCompatActivity() {
         id = intent.extras!!.get("id") as String?
 
         titleText = findViewById(R.id.title_text)
-        contentText = findViewById(R.id.content_text)
+        descriptionText = findViewById(R.id.description_text)
         createdByText = findViewById(R.id.created_by_text)
         editEventButton = findViewById(R.id.edit_event_button)
 
@@ -73,7 +71,7 @@ class ViewEventActivity : AppCompatActivity() {
                 event = task.result!!.toObject(Event::class.java)
 
                 titleText!!.text = event!!.title
-                contentText!!.text = event!!.content
+                descriptionText!!.text = event!!.description
                 createdByText!!.text = event!!.created_by
             }
             else {

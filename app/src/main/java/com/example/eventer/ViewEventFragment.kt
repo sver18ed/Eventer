@@ -1,21 +1,16 @@
 package com.example.eventer
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +24,7 @@ class ViewEventFragment : Fragment() {
 
     //UI elements
     private var titleText: TextView? = null
-    private var contentText: TextView? = null
+    private var descriptionText: TextView? = null
     private var createdByText: TextView? = null
     private var editEventButton: Button? = null
 
@@ -63,7 +58,7 @@ class ViewEventFragment : Fragment() {
         id = arguments?.getString("id")
 
         titleText = view!!.findViewById(R.id.title_text)
-        contentText = view!!.findViewById(R.id.content_text)
+        descriptionText = view!!.findViewById(R.id.description_text)
         createdByText = view!!.findViewById(R.id.created_by_text)
         editEventButton = view!!.findViewById(R.id.edit_event_button)
 
@@ -97,7 +92,7 @@ class ViewEventFragment : Fragment() {
                 event = task.result!!.toObject(Event::class.java)
 
                 titleText!!.text = event!!.title
-                contentText!!.text = event!!.content
+                descriptionText!!.text = event!!.description
                 createdByText!!.text = event!!.created_by
 
             }

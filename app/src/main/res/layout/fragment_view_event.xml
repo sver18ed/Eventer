@@ -17,7 +17,7 @@
         />
 
     <TextView
-        android:id="@+id/content_text"
+        android:id="@+id/description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -32,7 +32,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_text" />
+        app:layout_constraintTop_toBottomOf="@+id/description_text" />
 
     <Button
         android:id="@+id/join_button"

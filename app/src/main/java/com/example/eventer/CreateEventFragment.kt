@@ -1,5 +1,7 @@
 package com.example.eventer
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -11,7 +13,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateEventFragment : Fragment() {
@@ -39,7 +41,11 @@ class CreateEventFragment : Fragment() {
 
     //UI elements
     private var titleEditText: EditText? = null
-    private var contentEditText: EditText? = null
+    private var descriptionEditText: EditText? = null
+    private var startDateEditText: EditText? = null
+    private var endDateEditText: EditText? = null
+    private var startTimeEditText: EditText? = null
+    private var endTimeEditText: EditText? = null
     private var addressFrameLayout: FrameLayout? = null
     private var saveButton: Button? = null
 
@@ -53,7 +59,11 @@ class CreateEventFragment : Fragment() {
     //Global variables
     private var id: String? = null
     private var title: String? = null
-    private var content: String? = null
+    private var startDate: String? = null
+    private var endDate: String? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
+    private var description: String? = null
     private var address: String? = null
 
 
@@ -82,7 +92,11 @@ class CreateEventFragment : Fragment() {
 
     private fun initialise() {
         titleEditText = view!!.findViewById(R.id.title_edit_text)
-        contentEditText = view!!.findViewById(R.id.content_edit_text)
+        startDateEditText = view!!.findViewById(R.id.start_date_edit_text)
+        endDateEditText = view!!.findViewById(R.id.end_date_edit_text)
+        startTimeEditText = view!!.findViewById(R.id.start_time_edit_text)
+        endTimeEditText = view!!.findViewById(R.id.end_time_edit_text)
+        descriptionEditText = view!!.findViewById(R.id.description_edit_text)
         addressFrameLayout = view!!.findViewById(R.id.address_frame_layout)
         saveButton = view!!.findViewById(R.id.save_button)
 
@@ -92,6 +106,64 @@ class CreateEventFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
 
+
+        val dateFormat = "yyyy.MM.dd"
+        val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.ENGLISH)
+        val simpleTimeFormat = SimpleDateFormat("HH.mm")
+
+        startDateEditText!!.setText(SimpleDateFormat(dateFormat).format(System.currentTimeMillis()))
+        //startTimeEditText!!.setText(SimpleTimeFormat("").format(System.currentTimeMillis()))
+
+        var calendar = Calendar.getInstance()
+        var dateEditText: EditText? = null
+        var timeEditText: EditText? = null
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            dateEditText!!.setText(simpleDateFormat.format(calendar.time))
+        }
+
+        val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+            timeEditText!!.setText(simpleTimeFormat.format(calendar.time))
+        }
+
+        startDateEditText!!.setOnClickListener {
+            dateEditText = startDateEditText
+            DatePickerDialog(activity!!, dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        endDateEditText!!.setOnClickListener {
+            dateEditText = endDateEditText
+            DatePickerDialog(activity!!, dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        startTimeEditText!!.setOnClickListener {
+            timeEditText = startTimeEditText
+            TimePickerDialog(activity!!, timeSetListener,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+            true).show()
+        }
+
+        endTimeEditText!!.setOnClickListener {
+            timeEditText = endTimeEditText
+            TimePickerDialog(activity!!, timeSetListener,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true).show()
+        }
+
+
         saveButton!!.setOnClickListener {
             createNewEvent()
         }
@@ -99,10 +171,15 @@ class CreateEventFragment : Fragment() {
         initializePlaces()
     }
 
+
     private fun createNewEvent() {
         id = eventsCollection!!.document().id
         title = titleEditText?.text.toString()
-        content = contentEditText?.text.toString()
+        startDate = startDateEditText?.text.toString()
+        endDate = endDateEditText?.text.toString()
+        startTime = startTimeEditText?.text.toString()
+        endTime = endTimeEditText?.text.toString()
+        description = descriptionEditText?.text.toString()
         address = placeName.toString()
 
 
@@ -112,14 +189,17 @@ class CreateEventFragment : Fragment() {
                 ).putExtra("message", "Please login to create event!"))
         }
 
-        else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content) && !TextUtils.isEmpty(address)) {
+        else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description) && !TextUtils.isEmpty(address)) {
 
             val event = hashMapOf(
                 "id" to id,
                 "title" to title,
-                "content" to content,
+                "start_date" to startDate,
+                "end_date" to endDate,
+                "start_time" to startTime,
+                "end_time" to endTime,
+                "description" to description,
                 "created_by" to currentUser!!.email
-
             )
 
             eventsCollection!!.document(id!!).set(event).addOnCompleteListener { task ->

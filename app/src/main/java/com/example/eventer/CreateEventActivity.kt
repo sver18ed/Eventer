@@ -43,7 +43,7 @@ class CreateEventActivity : AppCompatActivity() {
 
     private fun initialise() {
         titleEditText = findViewById(R.id.title_edit_text)
-        contentEditText = findViewById(R.id.content_edit_text)
+        contentEditText = findViewById(R.id.description_edit_text)
         saveButton = findViewById(R.id.save_button)
 
         firestore = FirebaseFirestore.getInstance()
