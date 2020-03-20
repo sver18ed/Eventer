@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Eventer</string>
+    <string name="add_friend_button">Lägg Till</string>
+    <string name="address">Adress:</string>
+    <string name="content">Innehåll</string>
+    <string name="create_account">Skapa Konto</string>
+    <string name="create_event">Skapa Händelse</string>
+    <string name="edit">Uppdatera</string>
+    <string name="email">Email</string>
+    <string name="email_header">E-mail</string>
+    <string name="first_name">Förnamn</string>
+    <string name="friends_list">Vänner</string>
+    <string name="info_header">Info:</string>
+    <string name="join">Gå Med</string>
+    <string name="last_name">Efternamn</string>
+    <string name="login">Logga In</string>
+    <string name="logout">Logga Ut</string>
+    <string name="name_header">Namn:</string>
+    <string name="not_registered">Inte registrerad?</string>
+    <string name="ok">Ok</string>
+    <string name="password">Lösenord</string>
+    <string name="pending_friend_requests">Väntande Förfrågan</string>
+    <string name="profile">Profil</string>
+    <string name="return_button">Gå till föregående</string>
+    <string name="save">Spara</string>
+    <string name="title_activity_maps">Karta</string>
+    <string name="title">Titel</string>
+    <string name="upcoming_events">Kommande Händelser</string>
+    <string name="your_friends">Dina Vänner</string>
+    <string name="i_agree">Jag Godkänner</string>
+</resources>

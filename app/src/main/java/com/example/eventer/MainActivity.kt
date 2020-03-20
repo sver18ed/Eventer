@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(),
             R.id.nav_profile -> {
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_messages -> {
+            R.id.nav_login -> {
                 Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_friends -> {

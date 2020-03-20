@@ -23,6 +23,9 @@ class MainFragment : Fragment() {
     private var createEventFragment: Fragment? = null
     private var viewEventFragment: Fragment? = null
     private val mapFragment = MapFragment()
+    private var loginFragment: Fragment? = null
+    private var createAccountFragment: Fragment? = null
+
 
     //UI elements
     private var createEventButton: Button? = null
@@ -59,6 +62,8 @@ class MainFragment : Fragment() {
         //Initialising fragments
         createEventFragment = CreateEventFragment()
         viewEventFragment = ViewEventFragment()
+        loginFragment = LoginFragment()
+        createAccountFragment = CreateAccountFragment()
 
         //Initialising UIs
         createEventButton = view!!.findViewById(R.id.create_event_button)
@@ -78,8 +83,17 @@ class MainFragment : Fragment() {
 
         createEventButton!!.setOnClickListener {
             if (auth!!.currentUser == null) {
-                startActivity(Intent(activity, LoginActivity::class.java
-                ).putExtra("message", "Please login to create event!"))
+                Toast.makeText(
+                    activity,
+                    "Please login to create event!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+
+                //putExtra("message", "Please login to create event!"))
             } else {
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
                 fragmentTransaction.replace(R.id.myFragment, createEventFragment!!)
@@ -89,11 +103,17 @@ class MainFragment : Fragment() {
         }
 
         loginButton!!.setOnClickListener {
-            startActivity(Intent(activity, LoginActivity::class.java))
+           // startActivity(Intent(activity, LoginActivity::class.java))
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
         logoutButton!!.setOnClickListener {
             auth!!.signOut()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.detach(this).attach(this).commit()
             //this.recreate()
         }
 

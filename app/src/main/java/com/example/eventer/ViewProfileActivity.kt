@@ -2,9 +2,6 @@ package com.example.eventer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import com.example.eventer.models.UserRepository
-import com.example.eventer.models.userRepository
 
 class ViewProfileActivity : AppCompatActivity() {
 

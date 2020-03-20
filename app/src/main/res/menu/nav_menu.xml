@@ -4,12 +4,9 @@
     <group>
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/common_google_signin_btn_icon_dark"
+            android:icon="@drawable/common_google_signin_btn_icon_light"
             android:title="Profile"/>
-        <item
-            android:id="@+id/nav_messages"
-            android:icon="@drawable/common_google_signin_btn_text_light"
-            android:title="Messages"/>
+
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/common_google_signin_btn_text_light"
@@ -23,6 +20,10 @@
                 android:id="@+id/nav_update"
                 android:icon="@drawable/common_google_signin_btn_text_light"
                 android:title="Update Profile"/>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/common_google_signin_btn_text_dark"
+                />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/common_google_signin_btn_text_light"

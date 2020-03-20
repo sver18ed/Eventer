@@ -12,11 +12,12 @@
         android:layout_height="59dp"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal_centre"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.318" />
+        app:layout_constraintVertical_bias="0.334" />
 
     <EditText
         android:id="@+id/password_edit_text"
@@ -30,8 +31,8 @@
 
     <ImageButton
         android:id="@+id/return_button"
-        android:layout_width="67dp"
-        android:layout_height="70dp"
+        android:layout_width="43dp"
+        android:layout_height="44dp"
         android:contentDescription="@string/return_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,27 +47,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:layout_marginTop="20sp"
-        app:layout_constraintTop_toBottomOf="@id/password_edit_text"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal_centre"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_in_center"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_edit_text"
+        app:layout_constraintVertical_bias="0.153" />
 
     <Button
         android:id="@+id/create_account_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_account"
-        android:layout_marginTop="20sp"
-        app:layout_constraintTop_toBottomOf="@id/password_edit_text"
+        app:layout_constraintBottom_toTopOf="@+id/email_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_in_center" />/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.285" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_centre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/guideline_vertical_in_center"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="379dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

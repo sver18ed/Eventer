@@ -25,7 +25,7 @@
     <string name="actual_email" />
     <string name="actual_info" />
     <string name="info_header">Info:</string>
-    <string name="add_friend_button">ADD FRIEND</string>
+    <string name="add_friend_button">Add Friend</string>
     <string name="friends_list">Friends</string>
     <string name="your_friends">Your Friends:</string>
     <string name="pending_friend_requests">Pending Requests:</string>
@@ -39,4 +39,5 @@
     <string name="end_date">End Date</string>
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
+    <string name="address">Address:</string>
 </resources>

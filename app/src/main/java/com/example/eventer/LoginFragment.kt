@@ -1,20 +1,27 @@
 package com.example.eventer
 
-
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.eventer.models.hideKeyboard
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
-    private val TAG = "LoginActivity"
+    private val TAG = "LoginFragment"
+
+    //Fragments
+    private val mainFragment = MainFragment()
+    private val createAccountFragment = CreateAccountFragment()
 
     //global variables
     private var email: String? = null
@@ -29,42 +36,54 @@ class LoginActivity : AppCompatActivity() {
     //Firebase references
     private var auth: FirebaseAuth? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_login)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initialise()
 
-        val returnButton = this.findViewById<ImageButton>(R.id.return_button)
+        val returnButton = view.findViewById<ImageButton>(R.id.return_button)
         returnButton.setOnClickListener{
-            finish()
+            if ( fragmentManager!!.backStackEntryCount > 0)
+                fragmentManager!!.popBackStack()
+                hideKeyboard(activity!!)
         }
-    }
 
+
+    }
     private fun initialise() {
-        emailEditText = findViewById(R.id.email_edit_text)
-        passwordEditText = findViewById(R.id.password_edit_text)
-        loginButton = findViewById(R.id.login_button)
-        createAccountButton = findViewById(R.id.create_account_button)
+        emailEditText = view!!.findViewById(R.id.email_edit_text)
+        passwordEditText = view!!.findViewById(R.id.password_edit_text)
+        loginButton = view!!.findViewById(R.id.login_button)
+        createAccountButton = view!!.findViewById(R.id.create_account_button)
 
         auth = FirebaseAuth.getInstance()
 
         createAccountButton!!.setOnClickListener {
-            startActivity(Intent(this, CreateAccountActivity::class.java))
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myFragment, createAccountFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
         loginButton!!.setOnClickListener {
             loginUser()
         }
     }
-
     private fun loginUser() {
         email = emailEditText?.text.toString()
         password = passwordEditText?.text.toString()
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             Log.d(TAG, "Logging in user.")
             auth!!.signInWithEmailAndPassword(email!!, password!!)
-                .addOnCompleteListener(this) { task ->
+                .addOnCompleteListener(activity!!) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with signed-in user's information
                         Log.d(TAG, "signInWithEmail:success")
@@ -73,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                         // If sign in fails, display a message to the user.
                         Log.e(TAG, "signInWithEmail:failure", task.exception)
                         Toast.makeText(
-                            this,
+                            activity!!,
                             "Authentication failed.",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -81,16 +100,20 @@ class LoginActivity : AppCompatActivity() {
                 }
         } else {
             Toast.makeText(
-                this,
+                activity!!,
                 "You must enter all fields...",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
-
     private fun updateUI() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
+
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        fragmentTransaction.replace(R.id.myFragment, mainFragment)
+        fragmentTransaction.commit()
+
+        //val intent = Intent(this, MainActivity::class.java)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        //startActivity(intent)
     }
 }
