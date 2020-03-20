@@ -189,7 +189,10 @@ class CreateEventFragment : Fragment() {
                 ).putExtra("message", "Please login to create event!"))
         }
 
-        else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description) && !TextUtils.isEmpty(address)) {
+        else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(startDate) &&
+            !TextUtils.isEmpty(endDate) && !TextUtils.isEmpty(startTime) &&
+            !TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(description) &&
+            !TextUtils.isEmpty(address)) {
 
             val event = hashMapOf(
                 "id" to id,
@@ -199,7 +202,10 @@ class CreateEventFragment : Fragment() {
                 "start_time" to startTime,
                 "end_time" to endTime,
                 "description" to description,
-                "created_by" to currentUser!!.email
+                "created_by" to currentUser!!.email,
+                "latitude" to placeLatLng!!.latitude,
+                "longitude" to placeLatLng!!.longitude,
+                "location" to address
             )
 
             eventsCollection!!.document(id!!).set(event).addOnCompleteListener { task ->
@@ -255,6 +261,8 @@ class CreateEventFragment : Fragment() {
                 placeName = place.name
                 placeId = place.id
                 placeAddress = place.address
+
+                startMap()
 
                 Log.e("PlaceApi","onPlaceSelected: "+placeLatLng?.latitude+"\n"+placeLatLng?.longitude)
             }

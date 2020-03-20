@@ -10,7 +10,10 @@ class Event(
     val start_time: String = "",
     val end_time: String = "",
     val description: String = "",
-    val created_by: String = ""
+    val created_by: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
+
 
 ) : Serializable
 

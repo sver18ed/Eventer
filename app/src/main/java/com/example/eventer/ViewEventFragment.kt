@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -21,6 +22,7 @@ class ViewEventFragment : Fragment() {
 
     //Fragments
     private val editEventFragment = EditEventFragment()
+    private val mapFragment = MapFragment()
 
     //UI elements
     private var titleText: TextView? = null
@@ -37,6 +39,8 @@ class ViewEventFragment : Fragment() {
     //Global variables
     private var event: Event? = null
     private var id: String? = null
+
+    private var placeLatLng: LatLng? = null
 
 
     override fun onCreateView(
@@ -82,7 +86,7 @@ class ViewEventFragment : Fragment() {
 //            startActivity(Intent(activity, EditEventActivity::class.java
 //            ).putExtra("event", event))
         }
-        startMap()
+        //startMap()
     }
 
     private fun getEventFromFirestore() {
@@ -95,6 +99,10 @@ class ViewEventFragment : Fragment() {
                 descriptionText!!.text = event!!.description
                 createdByText!!.text = event!!.created_by
 
+                placeLatLng = LatLng(event!!.latitude, event!!.longitude)
+                Log.e("MapFragment", "place: Lat: "+placeLatLng!!.latitude+" Long: "+placeLatLng!!.longitude)
+
+                startMap()
             }
             else {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
@@ -108,8 +116,16 @@ class ViewEventFragment : Fragment() {
     }
     private fun startMap() {
 
+//        val transaction = fragmentManager!!.beginTransaction()
+//        transaction.replace(R.id.test_map, MapFragment.newInstance())
+//        transaction.commit()
+
+        val args = Bundle()
+        args.putParcelable("placeLatLng", placeLatLng)
+        mapFragment.arguments = args
+
         val transaction = fragmentManager!!.beginTransaction()
-        transaction.replace(R.id.test_map, MapFragment.newInstance())
+        transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()
     }
 }

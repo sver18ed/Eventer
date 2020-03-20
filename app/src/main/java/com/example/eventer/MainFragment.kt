@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
@@ -21,6 +22,7 @@ class MainFragment : Fragment() {
     //Fragments
     private var createEventFragment: Fragment? = null
     private var viewEventFragment: Fragment? = null
+    private val mapFragment = MapFragment()
 
     //UI elements
     private var createEventButton: Button? = null
@@ -72,10 +74,7 @@ class MainFragment : Fragment() {
 
         populateEventsListView()
 
-        val transaction = fragmentManager!!.beginTransaction()
-        transaction.replace(R.id.test_map, MapFragment.newInstance())
-        transaction.commit()
-
+        //startMap()
 
         createEventButton!!.setOnClickListener {
             if (auth!!.currentUser == null) {
@@ -126,6 +125,7 @@ class MainFragment : Fragment() {
                     listOfEvents!!
                 )
                 eventsListView?.adapter = adapter
+                startMap()
             }
             else {
                 Log.e(TAG, "eventsCollection.get():failure", task.exception)
@@ -136,6 +136,21 @@ class MainFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    private fun startMap() {
+        val args = Bundle()
+
+        val locations = ArrayList<LatLng>()
+        for (event in listOfEvents!!) {
+            locations.add(LatLng(event.latitude, event.longitude))
+        }
+        args.putParcelableArrayList("locations", locations)
+        mapFragment.arguments = args
+
+        val transaction = fragmentManager!!.beginTransaction()
+        transaction.replace(R.id.test_map, mapFragment)
+        transaction.commit()
     }
 
     override fun onStart() {

@@ -16,25 +16,15 @@ import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.io.IOException
+import android.widget.Toast
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [MapFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener  {
 
 
@@ -47,9 +37,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var locationUpdateState = false
     private var listener: OnFragmentInteractionListener? = null
     private var placeLatLng: LatLng? = null
-
-
-
 
     companion object {
         /**
@@ -71,6 +58,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onMarkerClick(p0: Marker?) = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.e("MapFragment", "onCreate()")
         super.onCreate(savedInstanceState)
 
         fusedLocationClient = context?.let { LocationServices.getFusedLocationProviderClient(it) }!!
@@ -79,7 +67,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 super.onLocationResult(p0)
 
                 lastLocation = p0.lastLocation
-                placeMarkerOnMap(LatLng(lastLocation.latitude, lastLocation.longitude))
+                //placeMarkerOnMap(LatLng(lastLocation.latitude, lastLocation.longitude))
             }
         }
         createLocationRequest()
@@ -88,12 +76,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
+        Log.e("MapFragment", "onCreateView()")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        placeLatLng = arguments?.getParcelable("placeLatLng")
+        Log.e("MapFragment", "onViewCreated()")
+        //placeLatLng = arguments?.getParcelable("placeLatLng")
 
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager
@@ -102,32 +92,62 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        Log.e("MapFragment", "onMapReady()")
         map = googleMap
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
 
-
         setUpMap()
+        var locations = arguments?.getParcelableArrayList<LatLng>("locations")
+        placeLatLng = arguments?.getParcelable("placeLatLng")
         if (placeLatLng != null) {
-            val createNewLocation: LatLng? = placeLatLng
-            placeMarkerOnMap(LatLng(createNewLocation!!.latitude, createNewLocation!!.longitude))
+            map.clear()
+            placeMarkerOnMap(placeLatLng!!)
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 12f))
+            Log.e("MapFragment", "moveCamera() in onMapReady")
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 12f))
+
+        } else if (locations != null) {
+            map.clear()
+            for (location in locations) {
+                placeMarkerOnMap(location)
+            }
         }
     }
 
     override fun onPause() {
+        Log.e("MapFragment", "onPause()")
         super.onPause()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     // 3
     override fun onResume() {
+        Log.e("MapFragment", "onResume()")
         super.onResume()
         if (!locationUpdateState) {
             startLocationUpdates()
         }
+
+        placeLatLng = arguments?.getParcelable("placeLatLng")
+        if (placeLatLng != null && ::map.isInitialized) {
+            //getFragmentManager()!!.beginTransaction().detach(this).attach(this).commit()
+            map.clear()
+            placeMarkerOnMap(placeLatLng!!)
+            //map.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 12f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 12f))
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 12f))
+        }
+    }
+
+    override fun onStart() {
+        Log.e("MapFragment", "onStart()")
+        super.onStart()
     }
 
     private fun setUpMap() {
+        Log.e("MapFragment", "setUpMap()")
+
         if (checkSelfPermission(context!!,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
             requestPermissions(
@@ -141,21 +161,22 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         map.mapType = GoogleMap.MAP_TYPE_HYBRID
 
-
-
-
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
                 lastLocation = location
                 val currentLatLng = LatLng(location.latitude, location.longitude)
-                placeMarkerOnMap(currentLatLng)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                //placeMarkerOnMap(currentLatLng)
+                if (placeLatLng == null) {
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                }
             }
         }
     }
 
     private fun placeMarkerOnMap(location: LatLng ) {
+        Log.e("MapFragment", "placeMarkerOnMap()")
+
         val markerOptions = MarkerOptions().position(location)
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
@@ -165,10 +186,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         markerOptions.snippet(titleStr)
 
         map.addMarker(markerOptions)
-        
     }
 
     private fun getAddress(latLng: LatLng): String {
+        Log.e("MapFragment", "getAddress()")
+
         // 1
         val geocoder = Geocoder(context)
         val addresses: List<Address>?
@@ -191,6 +213,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     private fun startLocationUpdates() {
+        Log.e("MapFragment", "startLocationUpdates()")
+
         //1
         if (checkSelfPermission(context!!,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
@@ -205,6 +229,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     private fun createLocationRequest() {
+        Log.e("MapFragment", "createLocationRequest()")
+
         // 1
         locationRequest = LocationRequest()
         // 2
@@ -245,6 +271,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onAttach(context: Context) {
+        Log.e("MapFragment", "onAttach()")
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
@@ -254,6 +281,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onDetach() {
+        Log.e("MapFragment", "onDetach()")
         super.onDetach()
         listener = null
     }
