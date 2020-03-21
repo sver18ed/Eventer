@@ -10,6 +10,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
@@ -24,11 +29,19 @@ class MainActivity : AppCompatActivity(),
     //Fragments
     private val fragmentManager = supportFragmentManager
     private val mainFragment = MainFragment()
+    private val viewProfileFragment = ViewProfileFragment()
 
     //Navigation
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+
+    //Firebase references
+    private var firestore: FirebaseFirestore? = null
+    private var usersCollection: CollectionReference? = null
+    private var userDocument: DocumentReference? = null
+    private var auth: FirebaseAuth? = null
+    private var currentUser: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +64,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initialise() {
+        firestore = FirebaseFirestore.getInstance()
+        //eventsCollection = firestore!!.collection("events")
+        usersCollection = firestore!!.collection("users")
+        auth = FirebaseAuth.getInstance()
+        currentUser = auth!!.currentUser
+
+
         /* Display First Fragment initially */
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.myFragment, mainFragment)
@@ -58,9 +78,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
             R.id.nav_profile -> {
-                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.myFragment, viewProfileFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
             }
             R.id.nav_login -> {
                 Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
@@ -78,9 +102,6 @@ class MainActivity : AppCompatActivity(),
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
-//    override fun onRestart() {
-//        super.onRestart()
-//        this.recreate()
-//    }
 }
+
+

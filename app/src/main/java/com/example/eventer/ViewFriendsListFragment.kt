@@ -13,6 +13,6 @@ class ViewFriendsListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_view_friends_list, container, false)
+        return inflater.inflate(R.layout.fragment_view_profile, container, false)
     }
 }

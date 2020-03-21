@@ -7,7 +7,7 @@ class ViewFriendsListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_view_friends_list)
+        setContentView(R.layout.fragment_view_profile)
 
 
     }
