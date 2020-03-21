@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.*
+import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(),
     private var currentUser: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.e("MainActivity", "onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initialise() {
+        Log.e("MainActivity", "initialise()")
         firestore = FirebaseFirestore.getInstance()
         //eventsCollection = firestore!!.collection("events")
         usersCollection = firestore!!.collection("users")
@@ -78,13 +81,18 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        Log.e("MainActivity", "onNavigationItemSelected()")
 
         when (item.itemId) {
             R.id.nav_profile -> {
-                val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.myFragment, viewProfileFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                if (auth!!.currentUser == null){
+                    Toast.makeText(this, "Login to see your profile", Toast.LENGTH_SHORT).show()
+                }else {
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.myFragment, viewProfileFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                }
             }
             R.id.nav_login -> {
                 Toast.makeText(this, "Messages clicked", Toast.LENGTH_SHORT).show()
