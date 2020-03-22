@@ -1,6 +1,5 @@
 package com.example.eventer
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -48,16 +47,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initialise()
-
-        val returnButton = view.findViewById<ImageButton>(R.id.return_button)
-        returnButton.setOnClickListener{
-            if ( fragmentManager!!.backStackEntryCount > 0)
-                fragmentManager!!.popBackStack()
-                hideKeyboard(activity!!)
-        }
-
-
     }
+
     private fun initialise() {
         emailEditText = view!!.findViewById(R.id.email_edit_text)
         passwordEditText = view!!.findViewById(R.id.password_edit_text)
@@ -78,6 +69,7 @@ class LoginFragment : Fragment() {
             hideKeyboard(activity!!)
         }
     }
+
     private fun loginUser() {
         email = emailEditText?.text.toString()
         password = passwordEditText?.text.toString()
@@ -107,14 +99,11 @@ class LoginFragment : Fragment() {
             ).show()
         }
     }
+
     private fun updateUI() {
 
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myFragment, mainFragment)
         fragmentTransaction.commit()
-
-        //val intent = Intent(this, MainActivity::class.java)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //startActivity(intent)
     }
 }

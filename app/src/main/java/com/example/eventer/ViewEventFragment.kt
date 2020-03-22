@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewEventFragment : Fragment() {
@@ -29,12 +31,14 @@ class ViewEventFragment : Fragment() {
     private var descriptionText: TextView? = null
     private var createdByText: TextView? = null
     private var editEventButton: Button? = null
+    private var joinEventButton: Button? = null
 
     //Firebase references
     private var firestore: FirebaseFirestore? = null
     private var eventsCollection: CollectionReference? = null
     private var eventDocument: DocumentReference? = null
     private var auth: FirebaseAuth? = null
+    private var currentUser: FirebaseUser? = null
 
     //Global variables
     private var event: Event? = null
@@ -65,11 +69,13 @@ class ViewEventFragment : Fragment() {
         descriptionText = view!!.findViewById(R.id.description_text)
         createdByText = view!!.findViewById(R.id.created_by_text)
         editEventButton = view!!.findViewById(R.id.edit_event_button)
+        joinEventButton = view!!.findViewById(R.id.join_button)
 
         firestore = FirebaseFirestore.getInstance()
         eventsCollection = firestore!!.collection("events")
         eventDocument = eventsCollection!!.document(id!!)
         auth = FirebaseAuth.getInstance()
+        currentUser = auth!!.currentUser
 
         getEventFromFirestore()
 
@@ -85,6 +91,29 @@ class ViewEventFragment : Fragment() {
 
 //            startActivity(Intent(activity, EditEventActivity::class.java
 //            ).putExtra("event", event))
+        }
+
+        joinEventButton!!.setOnClickListener {
+            eventsCollection!!.document(event!!.id).update(
+                "participants", FieldValue.arrayUnion(currentUser!!.email)
+            ).addOnCompleteListener(activity!!) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "join:success")
+                    Toast.makeText(
+                        activity,
+                        "You join the event!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else {
+                    Log.d(TAG, "join:failure", task.exception)
+                    Toast.makeText(
+                        activity,
+                        "Failed to join event...",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
         //startMap()
     }
@@ -114,11 +143,8 @@ class ViewEventFragment : Fragment() {
             }
         }
     }
-    private fun startMap() {
 
-//        val transaction = fragmentManager!!.beginTransaction()
-//        transaction.replace(R.id.test_map, MapFragment.newInstance())
-//        transaction.commit()
+    private fun startMap() {
 
         val args = Bundle()
         args.putParcelable("placeLatLng", placeLatLng)

@@ -38,6 +38,7 @@ class CreateEventFragment : Fragment() {
     //Fragments
     private val viewEventFragment = ViewEventFragment()
     private val mapFragment = MapFragment()
+    private val loginFragment = LoginFragment()
 
     //UI elements
     private var titleEditText: EditText? = null
@@ -114,7 +115,7 @@ class CreateEventFragment : Fragment() {
         startDateEditText!!.setText(SimpleDateFormat(dateFormat).format(System.currentTimeMillis()))
         //startTimeEditText!!.setText(SimpleTimeFormat("").format(System.currentTimeMillis()))
 
-        var calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         var dateEditText: EditText? = null
         var timeEditText: EditText? = null
 
@@ -184,9 +185,9 @@ class CreateEventFragment : Fragment() {
 
 
         if (currentUser == null) {
-            startActivity(
-                Intent(activity, LoginActivity::class.java
-                ).putExtra("message", "Please login to create event!"))
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myFragment, loginFragment)
+            fragmentTransaction.commit()
         }
 
         else if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(startDate) &&
@@ -248,7 +249,7 @@ class CreateEventFragment : Fragment() {
         }
         placesClient = Places.createClient(context!!)
 
-        var autocompleteSupportFragment: AutocompleteSupportFragment =
+        val autocompleteSupportFragment: AutocompleteSupportFragment =
             childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
 
         autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, NAME))

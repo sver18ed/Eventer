@@ -53,14 +53,6 @@ class CreateAccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initialise()
-
-        val returnButton = view!!.findViewById<ImageButton>(R.id.return_button_create)
-        returnButton.setOnClickListener{
-            if ( fragmentManager!!.backStackEntryCount > 0)
-                fragmentManager!!.popBackStack()
-                hideKeyboard(activity!!)
-        }
-
     }
 
     private fun initialise() {
@@ -78,6 +70,7 @@ class CreateAccountFragment : Fragment() {
             createNewAccount()
         }
     }
+
     private fun createNewAccount() {
         firstName = firstNameEditText?.text.toString()
         lastName = lastNameEditText?.text.toString()
@@ -125,8 +118,5 @@ class CreateAccountFragment : Fragment() {
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myFragment, mainFragment)
         fragmentTransaction.commit()
-     //   val intent = Intent(this, MainActivity::class.java)
-    //    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-     //   startActivity(intent)
     }
 }
