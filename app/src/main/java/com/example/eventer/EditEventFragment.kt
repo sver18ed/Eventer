@@ -22,6 +22,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -51,6 +52,7 @@ class EditEventFragment : Fragment() {
     private var eventsCollection: CollectionReference? = null
     private var eventDocument: DocumentReference? = null
     private var auth: FirebaseAuth? = null
+    private var currentUser: FirebaseUser? = null
 
     //Global variables
     private var event: Event? = null
@@ -99,6 +101,7 @@ class EditEventFragment : Fragment() {
         eventsCollection = firestore!!.collection("events")
         eventDocument = eventsCollection!!.document(id!!)
         auth = FirebaseAuth.getInstance()
+        currentUser = auth!!.currentUser
 
         getEventFromFirestore()
 

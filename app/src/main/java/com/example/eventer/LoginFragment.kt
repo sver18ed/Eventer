@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.hideKeyboard
@@ -105,5 +104,6 @@ class LoginFragment : Fragment() {
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myFragment, mainFragment)
         fragmentTransaction.commit()
+        activity!!.recreate()
     }
 }

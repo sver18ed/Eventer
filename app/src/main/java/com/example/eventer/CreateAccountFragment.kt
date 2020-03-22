@@ -95,7 +95,8 @@ class CreateAccountFragment : Fragment() {
                             "password" to password
                         )
                         currentUserDb.set(user)
-                        updateUserInfoAndUI()
+                        loginUser()
+                        updateUI()
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         Toast.makeText(
@@ -114,7 +115,11 @@ class CreateAccountFragment : Fragment() {
         }
     }
 
-    private fun updateUserInfoAndUI() {
+    private fun loginUser() {
+        auth!!.signInWithEmailAndPassword(email!!, password!!)
+    }
+
+    private fun updateUI() {
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myFragment, mainFragment)
         fragmentTransaction.commit()

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -17,14 +16,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
-
-
 
 class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
@@ -50,14 +41,11 @@ class MainActivity : AppCompatActivity(),
     //Firebase references
     private var firestore: FirebaseFirestore? = null
     private var usersCollection: CollectionReference? = null
-    private var userDocument: DocumentReference? = null
     private var auth: FirebaseAuth? = null
     private var currentUser: FirebaseUser? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.e("MainActivity", "onCreate()")
+        Log.e(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -67,7 +55,6 @@ class MainActivity : AppCompatActivity(),
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
-
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar, 0, 0
         )
@@ -76,65 +63,37 @@ class MainActivity : AppCompatActivity(),
         navView.setNavigationItemSelectedListener(this)
 
         initialise()
-    }
 
-    override fun onStart() {
-        super.onStart()
-        Log.e("MainActivity", "onStart")
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e("MainActivity", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("MainActivity", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("MainActivity", "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("MainActivity", "onDestroy")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.e("MainActivity", "onRestart")
+        var menu = navView.menu
+        if (auth!!.currentUser == null) {
+            menu.findItem(R.id.nav_login).setVisible(true)
+            menu.findItem(R.id.nav_logout).setVisible(false)
+        } else {
+            menu.findItem(R.id.nav_login).setVisible(false)
+            menu.findItem(R.id.nav_logout).setVisible(true)
+        }
     }
 
     private fun initialise() {
         Log.e("MainActivity", "initialise()")
         firestore = FirebaseFirestore.getInstance()
-        //eventsCollection = firestore!!.collection("events")
         usersCollection = firestore!!.collection("users")
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
 
-        checkLogin()
-
-
-        /* Display First Fragment initially */
+        /* Display Main Fragment initially */
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.myFragment, mainFragment)
         transaction.commit()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        Log.e("MainActivity", "onNavigationItemSelected()")
-
 
         when (item.itemId) {
             R.id.nav_profile -> {
                 if (auth!!.currentUser == null){
                     Toast.makeText(this, "Login to see your profile", Toast.LENGTH_SHORT).show()
-                }else {
+                } else {
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.myFragment, viewProfileFragment)
                     transaction.addToBackStack(null)
@@ -142,47 +101,20 @@ class MainActivity : AppCompatActivity(),
                 }
             }
 
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Friends clicked", Toast.LENGTH_SHORT).show()
+            R.id.nav_login -> {
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
             }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_login_logout -> {
-                if (auth!!.currentUser == null) {
-                    val menu = navView.getMenu()
-                    val menuItem = menu.findItem(R.id.nav_login_logout)
-                    menuItem.title = "Login"
-                    Log.e("MainActivity", "Now it should say Login")
-                    val fragmentTransaction = fragmentManager!!.beginTransaction()
-                    fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
-                }else {
-                    val menu = navView.getMenu()
-                    val menuItem = menu.findItem(R.id.nav_login_logout)
-                    menuItem.title = "Logout"
-                    Log.e("MainActivity", "Now it should say Logout")
-                    auth!!.signOut()
-                    //val fragmentTransaction = fragmentManager!!.beginTransaction()
-                    //fragmentTransaction.detach(this).attach(this).commit()
-                }
 
+            R.id.nav_logout -> {
+                auth!!.signOut()
+                this.recreate()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
-    }
-    private fun checkLogin() {
-        if (auth!!.currentUser == null) {
-            val menu = navView.getMenu()
-            val menuItem = menu.findItem(R.id.nav_login_logout)
-            menuItem.title = "Login"
-        } else {
-            val menu = navView.getMenu()
-            val menuItem = menu.findItem(R.id.nav_login_logout)
-            menuItem.title = "Logout"
-        }
     }
 }
 

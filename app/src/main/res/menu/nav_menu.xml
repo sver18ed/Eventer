@@ -6,24 +6,14 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/common_google_signin_btn_icon_light"
             android:title="Profile"/>
-
         <item
-            android:id="@+id/nav_friends"
+            android:id="@+id/nav_login"
             android:icon="@drawable/common_google_signin_btn_text_light"
-            android:title="Friends"/>
+            android:title="Login"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/common_google_signin_btn_text_light"
+            android:title="Logout"/>
     </group>
 
-
-    <item android:title="Account Settings">
-        <menu>
-            <item
-                android:id="@+id/nav_update"
-                android:icon="@drawable/common_google_signin_btn_text_light"
-                android:title="Update Profile"/>
-            <item
-                android:id="@+id/nav_login_logout"
-                android:icon="@drawable/common_google_signin_btn_text_light"
-                android:title=""/>
-        </menu>
-    </item>
 </menu>

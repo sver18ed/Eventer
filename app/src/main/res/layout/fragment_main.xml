@@ -10,22 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <Button
-            android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"
-            app:layout_constraintLeft_toRightOf="@id/login_button"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/logged_in_text"
@@ -34,7 +18,7 @@
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/upcoming_events"

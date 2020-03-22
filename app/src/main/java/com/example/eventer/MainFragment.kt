@@ -24,13 +24,9 @@ class MainFragment : Fragment() {
     private var viewEventFragment: Fragment? = null
     private val mapFragment = MapFragment()
     private var loginFragment: Fragment? = null
-    private var createAccountFragment: Fragment? = null
-
 
     //UI elements
     private var createEventButton: Button? = null
-    private var loginButton: Button? = null
-    private var logoutButton: Button? = null
     private var loggedInText: TextView? = null
     private var eventsListView: ListView? = null
 
@@ -63,12 +59,9 @@ class MainFragment : Fragment() {
         createEventFragment = CreateEventFragment()
         viewEventFragment = ViewEventFragment()
         loginFragment = LoginFragment()
-        createAccountFragment = CreateAccountFragment()
 
         //Initialising UIs
         createEventButton = view!!.findViewById(R.id.create_event_button)
-        loginButton = view!!.findViewById(R.id.login_button)
-        logoutButton = view!!.findViewById(R.id.logout_button)
         loggedInText = view!!.findViewById(R.id.logged_in_text)
         eventsListView = view!!.findViewById(R.id.events_list_view)
 
@@ -100,21 +93,6 @@ class MainFragment : Fragment() {
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
-        }
-
-        loginButton!!.setOnClickListener {
-           // startActivity(Intent(activity, LoginActivity::class.java))
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
-
-        logoutButton!!.setOnClickListener {
-            auth!!.signOut()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.detach(this).attach(this).commit()
-            //this.recreate()
         }
 
         eventsListView!!.setOnItemClickListener { _, _, position, _ ->
