@@ -75,6 +75,7 @@ class LoginFragment : Fragment() {
 
         loginButton!!.setOnClickListener {
             loginUser()
+            hideKeyboard(activity!!)
         }
     }
     private fun loginUser() {

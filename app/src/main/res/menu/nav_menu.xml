@@ -21,13 +21,9 @@
                 android:icon="@drawable/common_google_signin_btn_text_light"
                 android:title="Update Profile"/>
             <item
-                android:id="@+id/nav_login"
-                android:icon="@drawable/common_google_signin_btn_text_dark"
-                />
-            <item
-                android:id="@+id/nav_logout"
+                android:id="@+id/nav_login_logout"
                 android:icon="@drawable/common_google_signin_btn_text_light"
-                android:title="Sign Out"/>
+                android:title=""/>
         </menu>
     </item>
 </menu>
