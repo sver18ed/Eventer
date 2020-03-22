@@ -29,4 +29,13 @@
     <string name="upcoming_events">Kommande Händelser</string>
     <string name="your_friends">Dina Vänner</string>
     <string name="i_agree">Jag Godkänner</string>
+    <string name="description">Innehåll</string>
+    <string name="end_date">Slutdatum</string>
+    <string name="end_time">Sluttid</string>
+    <string name="ending_at">Slutar:</string>
+    <string name="start_date">Startdatum</string>
+    <string name="start_time">Starttid</string>
+    <string name="starting_at">Startar:</string>
+    <string name="username">Ej inloggad</string>
+    <string name="location">plats</string>
 </resources>

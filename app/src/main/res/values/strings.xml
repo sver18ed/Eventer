@@ -27,10 +27,6 @@
     <string name="your_friends">Your Friends:</string>
     <string name="pending_friend_requests">Pending Requests:</string>
     <string name="title_activity_maps">Map</string>
-    <string name="show_map">MAP</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="location">location</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
@@ -40,4 +36,5 @@
     <string name="username">Not logged in</string>
     <string name="starting_at">Starting At:</string>
     <string name="ending_at">Ending At:</string>
+    <string name="content">Content</string>
 </resources>
