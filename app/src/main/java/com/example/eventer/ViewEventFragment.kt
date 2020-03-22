@@ -30,6 +30,10 @@ class ViewEventFragment : Fragment() {
     private var titleText: TextView? = null
     private var descriptionText: TextView? = null
     private var createdByText: TextView? = null
+    private var startDateText: TextView? = null
+    private var endDateText: TextView? = null
+    private var startTimeText: TextView? = null
+    private var endTimeText: TextView? = null
     private var editEventButton: Button? = null
     private var joinEventButton: Button? = null
 
@@ -68,6 +72,10 @@ class ViewEventFragment : Fragment() {
         titleText = view!!.findViewById(R.id.title_text)
         descriptionText = view!!.findViewById(R.id.description_text)
         createdByText = view!!.findViewById(R.id.created_by_text)
+        startDateText = view!!.findViewById(R.id.start_date_text)
+        endDateText = view!!.findViewById(R.id.end_date_text)
+        startTimeText = view!!.findViewById(R.id.start_time_text)
+        endTimeText = view!!.findViewById(R.id.end_time_text)
         editEventButton = view!!.findViewById(R.id.edit_event_button)
         joinEventButton = view!!.findViewById(R.id.join_button)
 
@@ -88,9 +96,6 @@ class ViewEventFragment : Fragment() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.replace(R.id.myFragment, editEventFragment)
             fragmentTransaction.commit()
-
-//            startActivity(Intent(activity, EditEventActivity::class.java
-//            ).putExtra("event", event))
         }
 
         joinEventButton!!.setOnClickListener {
@@ -101,7 +106,7 @@ class ViewEventFragment : Fragment() {
                     Log.d(TAG, "join:success")
                     Toast.makeText(
                         activity,
-                        "You join the event!",
+                        "You joined the event!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -115,7 +120,6 @@ class ViewEventFragment : Fragment() {
                 }
             }
         }
-        //startMap()
     }
 
     private fun getEventFromFirestore() {
@@ -127,6 +131,10 @@ class ViewEventFragment : Fragment() {
                 titleText!!.text = event!!.title
                 descriptionText!!.text = event!!.description
                 createdByText!!.text = event!!.created_by
+                startDateText!!.text = event!!.start_date
+                endDateText!!.text = event!!.end_date
+                startTimeText!!.text = event!!.start_time
+                endTimeText!!.text = event!!.end_time
 
                 placeLatLng = LatLng(event!!.latitude, event!!.longitude)
                 Log.e("MapFragment", "place: Lat: "+placeLatLng!!.latitude+" Long: "+placeLatLng!!.longitude)

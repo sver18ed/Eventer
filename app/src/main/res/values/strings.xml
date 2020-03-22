@@ -20,10 +20,7 @@
     <string name="ok">Ok</string>
     <string name="profile">Profile</string>
     <string name="name_header">Name:</string>
-    <string name="actual_name" />
     <string name="email_header">E-mail:</string>
-    <string name="actual_email" />
-    <string name="actual_info" />
     <string name="info_header">Info:</string>
     <string name="add_friend_button">Add Friend</string>
     <string name="friends_list">Friends</string>
@@ -41,4 +38,6 @@
     <string name="end_time">End Time</string>
     <string name="address">Address:</string>
     <string name="username">Not logged in</string>
+    <string name="starting_at">Starting At:</string>
+    <string name="ending_at">Ending At:</string>
 </resources>
