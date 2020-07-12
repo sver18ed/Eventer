@@ -25,6 +25,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
@@ -211,6 +212,9 @@ class CreateEventFragment : Fragment() {
 
             eventsCollection!!.document(id!!).set(event).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    eventsCollection!!.document(id!!).update(
+                        "participants", FieldValue.arrayUnion(currentUser!!.email)
+                    )
                     Log.e(TAG, "createEvent:success")
                     updateUI()
                 } else {

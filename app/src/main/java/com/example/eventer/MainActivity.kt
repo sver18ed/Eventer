@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(),
             } else {
                 menu.findItem(R.id.nav_login).isVisible = false
                 menu.findItem(R.id.nav_logout).isVisible = true
-                navEmailText.text = "Logged in as: " + currentUser!!.email
+                navEmailText.text = "Logged in as: " + auth!!.currentUser!!.email
             }
         }
     }

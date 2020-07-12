@@ -139,7 +139,7 @@ class ViewEventFragment : Fragment() {
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
-            if (participants!!.contains(currentUser!!.email)) {
+            else if (participants!!.contains(currentUser!!.email)) {
                 Toast.makeText(
                     activity,
                     "You have already joined this event!",
