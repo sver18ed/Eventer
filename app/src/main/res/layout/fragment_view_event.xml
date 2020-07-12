@@ -92,6 +92,33 @@
         app:layout_constraintStart_toStartOf="@id/guideline_vertical_in_center"
         app:layout_constraintTop_toBottomOf="@+id/start_date_text" />
 
+    <TextView
+        android:id="@+id/participants_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/end_time_text" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/participants_list_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/participants_text"
+        app:layout_constraintBottom_toTopOf="@id/test_map" />
+
+    <FrameLayout
+        android:id="@+id/test_map"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/join_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_centre" />
+
     <Button
         android:id="@+id/join_button"
         android:layout_width="wrap_content"
@@ -112,15 +139,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline_vertical_in_center" />
-
-    <FrameLayout
-        android:id="@+id/test_map"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/edit_event_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_centre" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_horizontal_centre"

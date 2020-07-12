@@ -42,9 +42,6 @@ class ViewProfileFragment : Fragment() {
     private var user: User? = null
     private var id: String? = null
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,7 +68,7 @@ class ViewProfileFragment : Fragment() {
         usersCollection = firestore!!.collection("users")
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
-        userDocument = usersCollection!!.document(currentUser?.email!!)
+        userDocument = usersCollection!!.document(arguments?.getString("email")!!)
 
         getUserFromFirestore()
 

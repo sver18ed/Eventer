@@ -1,12 +1,13 @@
 package com.example.eventer
 
-import androidx.appcompat.app.AppCompatActivity
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.*
 import android.util.Log
+import android.view.MenuItem
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,8 +15,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.nav_header.view.*
 
 class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
@@ -64,13 +65,20 @@ class MainActivity : AppCompatActivity(),
 
         initialise()
 
-        var menu = navView.menu
-        if (auth!!.currentUser == null) {
-            menu.findItem(R.id.nav_login).setVisible(true)
-            menu.findItem(R.id.nav_logout).setVisible(false)
-        } else {
-            menu.findItem(R.id.nav_login).setVisible(false)
-            menu.findItem(R.id.nav_logout).setVisible(true)
+        val menu = navView.menu
+        menu.findItem(R.id.nav_login).isVisible = true
+        var navEmailText = navView.getHeaderView(0).nav_email_text
+
+        auth!!.addAuthStateListener {
+            if (auth!!.currentUser == null) {
+                menu.findItem(R.id.nav_login).isVisible = true
+                menu.findItem(R.id.nav_logout).isVisible = false
+                navEmailText.text = getString(R.string.no_user_signed_in)
+            } else {
+                menu.findItem(R.id.nav_login).isVisible = false
+                menu.findItem(R.id.nav_logout).isVisible = true
+                navEmailText.text = "Logged in as: " + currentUser!!.email
+            }
         }
     }
 
@@ -93,7 +101,15 @@ class MainActivity : AppCompatActivity(),
             R.id.nav_profile -> {
                 if (auth!!.currentUser == null){
                     Toast.makeText(this, "Login to see your profile", Toast.LENGTH_SHORT).show()
+                    val fragmentTransaction = fragmentManager!!.beginTransaction()
+                    fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
                 } else {
+                    val args = Bundle()
+                    args.putString("email", currentUser!!.email)
+                    viewProfileFragment!!.arguments = args
+
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.myFragment, viewProfileFragment)
                     transaction.addToBackStack(null)
@@ -110,7 +126,6 @@ class MainActivity : AppCompatActivity(),
 
             R.id.nav_logout -> {
                 auth!!.signOut()
-                this.recreate()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

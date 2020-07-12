@@ -37,4 +37,5 @@
     <string name="starting_at">Starting At:</string>
     <string name="ending_at">Ending At:</string>
     <string name="content">Content</string>
+    <string name="no_user_signed_in">No user signed in!</string>
 </resources>

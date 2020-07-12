@@ -5,9 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
 import com.google.android.gms.maps.model.LatLng
@@ -24,7 +23,9 @@ class ViewEventFragment : Fragment() {
 
     //Fragments
     private val editEventFragment = EditEventFragment()
+    private val loginFragment = LoginFragment()
     private val mapFragment = MapFragment()
+    private val viewProfileFragment = ViewProfileFragment()
 
     //UI elements
     private var titleText: TextView? = null
@@ -34,6 +35,8 @@ class ViewEventFragment : Fragment() {
     private var endDateText: TextView? = null
     private var startTimeText: TextView? = null
     private var endTimeText: TextView? = null
+    private var participantsListView: ListView? = null
+    private var participantsText: TextView? = null
     private var editEventButton: Button? = null
     private var joinEventButton: Button? = null
 
@@ -47,6 +50,7 @@ class ViewEventFragment : Fragment() {
     //Global variables
     private var event: Event? = null
     private var id: String? = null
+    private var participants: List<String>? = null
 
     private var placeLatLng: LatLng? = null
 
@@ -76,6 +80,8 @@ class ViewEventFragment : Fragment() {
         endDateText = view!!.findViewById(R.id.end_date_text)
         startTimeText = view!!.findViewById(R.id.start_time_text)
         endTimeText = view!!.findViewById(R.id.end_time_text)
+        participantsListView = view!!.findViewById(R.id.participants_list_view)
+        participantsText = view!!.findViewById(R.id.participants_text)
         editEventButton = view!!.findViewById(R.id.edit_event_button)
         joinEventButton = view!!.findViewById(R.id.join_button)
 
@@ -85,38 +91,81 @@ class ViewEventFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
 
+        editEventButton!!.isVisible = currentUser != null
+
         getEventFromFirestore()
 
-        editEventButton!!.setOnClickListener {
+        participantsListView!!.setOnItemClickListener { _, _, position, _ ->
+
             val args = Bundle()
-            args.putString("id", id)
-            editEventFragment.arguments = args
+            args.putString("email", participants!![position])
+            viewProfileFragment!!.arguments = args
 
             val fragmentTransaction = fragmentManager!!.beginTransaction()
             fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.replace(R.id.myFragment, editEventFragment)
+            fragmentTransaction.replace(R.id.myFragment, viewProfileFragment!!)
             fragmentTransaction.commit()
         }
 
+        editEventButton!!.setOnClickListener {
+            if (event!!.created_by == currentUser!!.email) {
+                val args = Bundle()
+                args.putString("id", id)
+                editEventFragment.arguments = args
+
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.replace(R.id.myFragment, editEventFragment)
+                fragmentTransaction.commit()
+            }
+            else {
+                Toast.makeText(
+                    activity,
+                    "You are not authorized to edit this event!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         joinEventButton!!.setOnClickListener {
-            eventsCollection!!.document(event!!.id).update(
-                "participants", FieldValue.arrayUnion(currentUser!!.email)
-            ).addOnCompleteListener(activity!!) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "join:success")
-                    Toast.makeText(
-                        activity,
-                        "You joined the event!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else {
-                    Log.d(TAG, "join:failure", task.exception)
-                    Toast.makeText(
-                        activity,
-                        "Failed to join event...",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            if (currentUser == null) {
+                Toast.makeText(
+                    activity,
+                    "Please login to join event!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
+            if (participants!!.contains(currentUser!!.email)) {
+                Toast.makeText(
+                    activity,
+                    "You have already joined this event!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else {
+                eventsCollection!!.document(event!!.id).update(
+                    "participants", FieldValue.arrayUnion(currentUser!!.email)
+                ).addOnCompleteListener(activity!!) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "join:success")
+                        Toast.makeText(
+                            activity,
+                            "You joined the event!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else {
+                        Log.d(TAG, "join:failure", task.exception)
+                        Toast.makeText(
+                            activity,
+                            "Failed to join event...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -136,6 +185,12 @@ class ViewEventFragment : Fragment() {
                 startTimeText!!.text = event!!.start_time
                 endTimeText!!.text = event!!.end_time
 
+                participants = task.result!!.get("participants") as List<String>
+
+                participantsText!!.text = participants!!.size.toString() + " Participants: "
+
+                populateParticipantsListView()
+
                 placeLatLng = LatLng(event!!.latitude, event!!.longitude)
                 Log.e("MapFragment", "place: Lat: "+placeLatLng!!.latitude+" Long: "+placeLatLng!!.longitude)
 
@@ -150,6 +205,15 @@ class ViewEventFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    private fun populateParticipantsListView() {
+        val adapter = ArrayAdapter(
+            activity!!,
+            android.R.layout.simple_list_item_1,
+            participants!!
+        )
+        participantsListView?.adapter = adapter
     }
 
     private fun startMap() {

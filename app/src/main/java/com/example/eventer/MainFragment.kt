@@ -27,7 +27,6 @@ class MainFragment : Fragment() {
 
     //UI elements
     private var createEventButton: Button? = null
-    private var loggedInText: TextView? = null
     private var eventsListView: ListView? = null
 
     //Firebase references
@@ -54,6 +53,11 @@ class MainFragment : Fragment() {
         initialise()
     }
 
+    override fun onResume() {
+        super.onResume()
+        currentUser = auth!!.currentUser
+    }
+
     private fun initialise() {
         //Initialising fragments
         createEventFragment = CreateEventFragment()
@@ -62,7 +66,6 @@ class MainFragment : Fragment() {
 
         //Initialising UIs
         createEventButton = view!!.findViewById(R.id.create_event_button)
-        loggedInText = view!!.findViewById(R.id.logged_in_text)
         eventsListView = view!!.findViewById(R.id.events_list_view)
 
         firestore = FirebaseFirestore.getInstance()
@@ -75,7 +78,7 @@ class MainFragment : Fragment() {
         //startMap()
 
         createEventButton!!.setOnClickListener {
-            if (auth!!.currentUser == null) {
+            if (currentUser == null) {
                 Toast.makeText(
                     activity,
                     "Please login to create event!",
@@ -149,15 +152,5 @@ class MainFragment : Fragment() {
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (currentUser != null) {
-            loggedInText!!.text = "Logged in as: "+currentUser!!.email
-        } else {
-            loggedInText!!.text = "No user signed in"
-        }
     }
 }

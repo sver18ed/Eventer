@@ -3,6 +3,7 @@ package com.example.eventer
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,42 +78,62 @@ class CreateAccountFragment : Fragment() {
         email = emailEditText?.text.toString()
         password = passwordEditText?.text.toString()
 
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)
-            && !TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) {
-
-            auth!!.createUserWithEmailAndPassword(email!!, password!!)
-                .addOnCompleteListener(activity!!) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
-                        val userId = auth!!.currentUser!!.uid
-                        //update user profile information
-                        val currentUserDb = usersCollection!!.document(email!!)
-                        val user = hashMapOf(
-                            "userId" to userId,
-                            "firstName" to firstName,
-                            "lastName" to lastName,
-                            "email" to email,
-                            "password" to password
-                        )
-                        currentUserDb.set(user)
-                        loginUser()
-                        updateUI()
-                    } else {
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            activity!!,
-                            "Authentication failed.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        } else {
-            Toast.makeText(
-                activity!!,
-                "You must enter all fields...",
-                Toast.LENGTH_SHORT
-            ).show()
+        if (firstName!!.isEmpty()) {
+            firstNameEditText!!.error = "Please enter a first name"
+            firstNameEditText!!.requestFocus()
+            return
         }
+
+        if (lastName!!.isEmpty()) {
+            lastNameEditText!!.error = "Please enter a last name"
+            lastNameEditText!!.requestFocus()
+            return
+        }
+
+        if (email!!.isEmpty()) {
+            emailEditText!!.error = "Please enter an email"
+            emailEditText!!.requestFocus()
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
+            emailEditText!!.error = "Please enter a valid email"
+            emailEditText!!.requestFocus()
+            return
+        }
+
+        if (password!!.isEmpty()) {
+            passwordEditText!!.error = "Please enter a password"
+            passwordEditText!!.requestFocus()
+            return
+        }
+
+        auth!!.createUserWithEmailAndPassword(email!!, password!!)
+            .addOnCompleteListener(activity!!) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "createUserWithEmail:success")
+                    val userId = auth!!.currentUser!!.uid
+                    //update user profile information
+                    val currentUserDb = usersCollection!!.document(email!!)
+                    val user = hashMapOf(
+                        "userId" to userId,
+                        "firstName" to firstName,
+                        "lastName" to lastName,
+                        "email" to email,
+                        "password" to password
+                    )
+                    currentUserDb.set(user)
+                    loginUser()
+                    updateUI()
+                } else {
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        activity!!,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     private fun loginUser() {
