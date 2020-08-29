@@ -39,4 +39,7 @@
     <string name="username">Ej inloggad</string>
     <string name="location">plats</string>
     <string name="no_user_signed_in">Ingen användare inloggad!</string>
+    <string name="participants">deltagare</string>
+    <string name="participant">deltagare</string>
+    <string name="logged_in_as">Inloggad som:</string>
 </resources>

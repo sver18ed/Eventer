@@ -17,7 +17,7 @@
     <string name="not_registered">Not registered?</string>
     <string name="email">Email</string>
     <string name="i_agree">I agree</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="profile">Profile</string>
     <string name="name_header">Name:</string>
     <string name="email_header">E-mail:</string>
@@ -38,4 +38,8 @@
     <string name="ending_at">Ending At:</string>
     <string name="content">Content</string>
     <string name="no_user_signed_in">No user signed in!</string>
+    <string name="participants">partisipants</string>
+    <string name="participant">participant</string>
+    <string name="logged_in_as">Logged in as:</string>
+
 </resources>
