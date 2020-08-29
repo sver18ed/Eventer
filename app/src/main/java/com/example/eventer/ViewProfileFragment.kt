@@ -105,7 +105,7 @@ class ViewProfileFragment : Fragment() {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
-                    "Couldn't fetch event from server",
+                    getString(R.string.msg_fetch_user_from_server_unsucessful),
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -38,8 +38,28 @@
     <string name="ending_at">Ending At:</string>
     <string name="content">Content</string>
     <string name="no_user_signed_in">No user signed in!</string>
-    <string name="participants">partisipants</string>
+    <string name="participants">participants</string>
     <string name="participant">participant</string>
     <string name="logged_in_as">Logged in as:</string>
+    <string name="msg_already_joined_event">You have already joined this event!</string>
+    <string name="msg_not_auth_edit_event">You are not authorized to edit this event!</string>
+    <string name="msg_login_to_join_event">Please login to join the event!</string>
+    <string name="msg_join_event_successful">You joined the event!</string>
+    <string name="msg_join_event_unsucessful">Unable to join the event...</string>
+    <string name="msg_fetch_event_from_server_unsucessful">Couldn\'t fetch event from server.</string>
+    <string name="msg_fetch_user_from_server_unsucessful">Couldn\'t fetch user from server.</string>
+    <string name="msg_fetch_list_events_from_server_unsucessful">Couldn\'t fetch list of events from server.</string>
+    <string name="msg_login_to_create_event">Please login to create event!</string>
+    <string name="msg_login_auth_failed">Authentication failed. Check your username and password.</string>
+    <string name="msg_enter_all_fields">You must enter all fields...</string>
+    <string name="msg_event_updated_sucess">Event sucessfully updated!</string>
+    <string name="msg_event_update_unsucessful">Event failed to update...</string>
+    <string name="msg_event_not_created">Event couldn\'t be created.</string>
+    <string name="msg_enter_first_name">Please enter a first name.</string>
+    <string name="msg_enter_last_name">Please enter a last name.</string>
+    <string name="msg_enter_email">Please enter an email-address.</string>
+    <string name="msg_enter_valid_email">Please enter a valid email-address.</string>
+    <string name="msg_enter_password">Please enter a password with at least 6 characters.</string>
+    <string name="msg_create_user_failed">Authentication failed. Check if the email address entered is unique and that the password has at least 6 characters.</string>
 
 </resources>

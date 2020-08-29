@@ -186,7 +186,7 @@ class EditEventFragment : Fragment() {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
-                    "Couldn't fetch event from server",
+                    getString(R.string.msg_fetch_event_from_server_unsucessful),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -221,7 +221,7 @@ class EditEventFragment : Fragment() {
                     Log.d(TAG, "update:success")
                     Toast.makeText(
                         activity,
-                        "Event successfully updated!",
+                        getString(R.string.msg_event_updated_sucess),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -229,7 +229,7 @@ class EditEventFragment : Fragment() {
                     Log.d(TAG, "update:failure", task.exception)
                     Toast.makeText(
                         activity,
-                        "Event failed to update...",
+                        getString(R.string.msg_event_update_unsucessful),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -237,7 +237,7 @@ class EditEventFragment : Fragment() {
         } else {
             Toast.makeText(
                 activity,
-                "You must enter all fields...",
+                getString(R.string.msg_enter_all_fields),
                 Toast.LENGTH_SHORT
             ).show()
         }

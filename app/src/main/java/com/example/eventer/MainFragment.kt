@@ -81,7 +81,7 @@ class MainFragment : Fragment() {
             if (currentUser == null) {
                 Toast.makeText(
                     activity,
-                    "Please login to create event!",
+                    getString(R.string.msg_login_to_create_event),
                     Toast.LENGTH_SHORT
                 ).show()
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
@@ -132,7 +132,7 @@ class MainFragment : Fragment() {
                 Log.e(TAG, "eventsCollection.get():failure", task.exception)
                 Toast.makeText(
                     activity,
-                    "Couldn't fetch list of events from server",
+                    getText(R.string.msg_fetch_list_events_from_server_unsucessful),
                     Toast.LENGTH_SHORT
                 ).show()
             }

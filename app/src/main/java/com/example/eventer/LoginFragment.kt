@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
                         Log.e(TAG, "signInWithEmail:failure", task.exception)
                         Toast.makeText(
                             activity!!,
-                            "Authentication failed.",
+                            getString(R.string.msg_login_auth_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -94,7 +94,7 @@ class LoginFragment : Fragment() {
         } else {
             Toast.makeText(
                 activity!!,
-                "You must enter all fields...",
+                getString(R.string.msg_enter_all_fields),
                 Toast.LENGTH_SHORT
             ).show()
         }

@@ -79,31 +79,31 @@ class CreateAccountFragment : Fragment() {
         password = passwordEditText?.text.toString()
 
         if (firstName!!.isEmpty()) {
-            firstNameEditText!!.error = "Please enter a first name"
+            firstNameEditText!!.error = getString(R.string.msg_enter_first_name)
             firstNameEditText!!.requestFocus()
             return
         }
 
         if (lastName!!.isEmpty()) {
-            lastNameEditText!!.error = "Please enter a last name"
+            lastNameEditText!!.error = getString(R.string.msg_enter_last_name)
             lastNameEditText!!.requestFocus()
             return
         }
 
         if (email!!.isEmpty()) {
-            emailEditText!!.error = "Please enter an email"
+            emailEditText!!.error = getString(R.string.msg_enter_email)
             emailEditText!!.requestFocus()
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
-            emailEditText!!.error = "Please enter a valid email"
+            emailEditText!!.error = getString(R.string.msg_enter_valid_email)
             emailEditText!!.requestFocus()
             return
         }
 
         if (password!!.isEmpty()) {
-            passwordEditText!!.error = "Please enter a password"
+            passwordEditText!!.error = getString(R.string.msg_enter_password)
             passwordEditText!!.requestFocus()
             return
         }
@@ -129,7 +129,7 @@ class CreateAccountFragment : Fragment() {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         activity!!,
-                        "Authentication failed.",
+                        getString(R.string.msg_create_user_failed),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

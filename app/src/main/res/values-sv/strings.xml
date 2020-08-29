@@ -42,4 +42,24 @@
     <string name="participants">deltagare</string>
     <string name="participant">deltagare</string>
     <string name="logged_in_as">Inloggad som:</string>
+    <string name="msg_already_joined_event">Du har redan gått med i evenemanget!</string>
+    <string name="msg_not_auth_edit_event">Du har inte tillåtelse att ändra i evenemanget!</string>
+    <string name="msg_login_to_join_event">Logga in för att gå med i evenemanget!</string>
+    <string name="msg_join_event_successful">Du har gått med i evenemanget!</string>
+    <string name="msg_join_event_unsucessful">Kunde inte gå med i evenemanget...</string>
+    <string name="msg_fetch_event_from_server_unsucessful">Det gick inte hämta evenemanget från servern.</string>
+    <string name="msg_fetch_user_from_server_unsucessful">Det gick inte hämta användaren från servern.</string>
+    <string name="msg_fetch_list_events_from_server_unsucessful">Det gick inte hämta evenemangslistan från servern.</string>
+    <string name="msg_login_to_create_event">Logga in för att skapa ett evenemang!</string>
+    <string name="msg_login_auth_failed">Autentisering misslyckades. Kontrollera användarnamn och lösenord.</string>
+    <string name="msg_enter_all_fields">Du måste fylla i alla fält...</string>
+    <string name="msg_event_updated_sucess">Evenemanget har blivit uppdaterat!</string>
+    <string name="msg_event_update_unsucessful">Det gick inte uppdatera evenemanget...</string>
+    <string name="msg_event_not_created">Evenemanget kunde inte skapas.</string>
+    <string name="msg_enter_first_name">Skriv in ett förnamn.</string>
+    <string name="msg_enter_last_name">Skriv in ett efternamn.</string>
+    <string name="msg_enter_email">Skriv in en epost-adress.</string>
+    <string name="msg_enter_valid_email">Skriv in en giltig epost-adress.</string>
+    <string name="msg_enter_password">Skriv in ett lösenord med minst 6 tecken.</string>
+    <string name="msg_create_user_failed">Autentisering misslyckades. Kontrollera så den ifyllda epost-adressen är unik och att lösenordet innehåller minst 6 tecken.</string>
 </resources>

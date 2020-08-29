@@ -121,7 +121,7 @@ class ViewEventFragment : Fragment() {
             else {
                 Toast.makeText(
                     activity,
-                    "You are not authorized to edit this event!",
+                    getString(R.string.msg_not_auth_edit_event),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -131,7 +131,7 @@ class ViewEventFragment : Fragment() {
             if (currentUser == null) {
                 Toast.makeText(
                     activity,
-                    "Please login to join event!",
+                    getString(R.string.msg_login_to_join_event),
                     Toast.LENGTH_SHORT
                 ).show()
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
@@ -142,7 +142,7 @@ class ViewEventFragment : Fragment() {
             else if (participants!!.contains(currentUser!!.email)) {
                 Toast.makeText(
                     activity,
-                    "You have already joined this event!",
+                    getString(R.string.msg_already_joined_event),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -154,7 +154,7 @@ class ViewEventFragment : Fragment() {
                         Log.d(TAG, "join:success")
                         Toast.makeText(
                             activity,
-                            "You joined the event!",
+                            getString(R.string.msg_join_event_successful),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -162,7 +162,7 @@ class ViewEventFragment : Fragment() {
                         Log.d(TAG, "join:failure", task.exception)
                         Toast.makeText(
                             activity,
-                            "Failed to join event...",
+                            getString(R.string.msg_join_event_unsucessful),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -187,7 +187,7 @@ class ViewEventFragment : Fragment() {
 
                 participants = task.result!!.get("participants") as List<String>
 
-                participantsText!!.text = participants!!.size.toString() + " Participants: "
+                participantsText!!.text = participants!!.size.toString() + " " + getString(R.string.participants)
 
                 populateParticipantsListView()
 
@@ -200,7 +200,7 @@ class ViewEventFragment : Fragment() {
                 Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
-                    "Couldn't fetch event from server",
+                    getString(R.string.msg_fetch_event_from_server_unsucessful),
                     Toast.LENGTH_SHORT
                 ).show()
             }

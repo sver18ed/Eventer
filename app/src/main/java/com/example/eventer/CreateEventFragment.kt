@@ -221,7 +221,7 @@ class CreateEventFragment : Fragment() {
                     Log.e(TAG, "createEvent:failure", task.exception)
                     Toast.makeText(
                         activity,
-                        "Event couldn't be created",
+                        getString(R.string.msg_event_not_created),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -229,7 +229,7 @@ class CreateEventFragment : Fragment() {
         } else {
             Toast.makeText(
                 activity,
-                "You must enter all fields...",
+                getString(R.string.msg_enter_all_fields),
                 Toast.LENGTH_SHORT
             ).show()
         }
