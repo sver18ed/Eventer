@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.contains
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.example.eventer.models.MapMarker
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,8 +19,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewEventFragment : Fragment() {
-
-    private val TAG = "ViewEventFragment"
 
     //Fragments
     private val editEventFragment = EditEventFragment()
@@ -54,21 +52,18 @@ class ViewEventFragment : Fragment() {
     private var id: String? = null
     private var participants: List<String>? = null
 
-    private var placeLatLng: LatLng? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_event, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        startMap()
         initialise()
     }
 
@@ -98,16 +93,15 @@ class ViewEventFragment : Fragment() {
 
         getEventFromFirestore()
 
-
         participantsListView!!.setOnItemClickListener { _, _, position, _ ->
 
             val args = Bundle()
             args.putString("email", participants!![position])
-            viewProfileFragment!!.arguments = args
+            viewProfileFragment.arguments = args
 
             val fragmentTransaction = fragmentManager!!.beginTransaction()
             fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.replace(R.id.myFragment, viewProfileFragment!!)
+            fragmentTransaction.replace(R.id.myFragment, viewProfileFragment)
             fragmentTransaction.commit()
         }
 
@@ -139,7 +133,7 @@ class ViewEventFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                fragmentTransaction.replace(R.id.myFragment, loginFragment)
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
@@ -148,7 +142,6 @@ class ViewEventFragment : Fragment() {
                     "participants", FieldValue.arrayUnion(currentUser!!.email)
                 ).addOnCompleteListener(activity!!) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "join:success")
                         Toast.makeText(
                             activity,
                             getString(R.string.msg_join_event_successful),
@@ -158,7 +151,6 @@ class ViewEventFragment : Fragment() {
                         leaveButtonVisible()
                     }
                     else {
-                        Log.d(TAG, "join:failure", task.exception)
                         Toast.makeText(
                             activity,
                             getString(R.string.msg_join_event_unsucessful),
@@ -186,7 +178,6 @@ class ViewEventFragment : Fragment() {
                     "participants", FieldValue.arrayRemove(currentUser!!.email)
                 ).addOnCompleteListener(activity!!) { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "leave:success")
                         Toast.makeText(
                             activity,
                             getString(R.string.msg_leave_event_sucessful),
@@ -196,7 +187,6 @@ class ViewEventFragment : Fragment() {
                         joinButtonVisible()
                     }
                     else {
-                        Log.d(TAG, "leave:failure", task.exception)
                         Toast.makeText(
                             activity,
                             getString(R.string.msg_leave_event_unsucessful),
@@ -211,7 +201,6 @@ class ViewEventFragment : Fragment() {
     private fun getEventFromFirestore() {
         eventDocument!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e(TAG, "eventDocument.get():success")
                 event = task.result!!.toObject(Event::class.java)
 
                 titleText!!.text = event!!.title
@@ -226,6 +215,9 @@ class ViewEventFragment : Fragment() {
 
                 participantsText!!.text = participants!!.size.toString() + " " + getString(R.string.participants)
 
+                mapFragment.placeMarkerOnMap(MapMarker(event!!.title, LatLng(event!!.latitude, event!!.longitude)))
+                mapFragment.animateToLocation(event!!.latitude, event!!.longitude)
+
                 populateParticipantsListView()
 
                 if (event!!.created_by != currentUser!!.email){
@@ -236,14 +228,8 @@ class ViewEventFragment : Fragment() {
                 } else {
                     joinButtonVisible()
                 }
-
-                placeLatLng = LatLng(event!!.latitude, event!!.longitude)
-                Log.e("MapFragment", "place: Lat: "+placeLatLng!!.latitude+" Long: "+placeLatLng!!.longitude)
-
-                startMap()
             }
             else {
-                Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
                     getString(R.string.msg_fetch_event_from_server_unsucessful),
@@ -263,11 +249,6 @@ class ViewEventFragment : Fragment() {
     }
 
     private fun startMap() {
-
-        val args = Bundle()
-        args.putParcelable("placeLatLng", placeLatLng)
-        mapFragment.arguments = args
-
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()
@@ -275,14 +256,12 @@ class ViewEventFragment : Fragment() {
     private fun refreshParticipantsListView() {
         eventDocument!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e(TAG, "eventDocument.get():success")
                 event = task.result!!.toObject(Event::class.java)
                 participants = task.result!!.get("participants") as List<String>
                 participantsText!!.text = participants!!.size.toString() + " " + getString(R.string.participants)
                 populateParticipantsListView()
             }
             else {
-                Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
                     getString(R.string.msg_fetch_event_from_server_unsucessful),

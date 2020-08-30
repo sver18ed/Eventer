@@ -14,6 +14,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.example.eventer.models.MapMarker
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -30,8 +31,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class EditEventFragment : Fragment() {
-
-    private val TAG = "EditEventFragment"
 
     private lateinit var placesClient: PlacesClient
 
@@ -64,25 +63,18 @@ class EditEventFragment : Fragment() {
     private var endTime: String? = null
     private var description: String? = null
     private var address: String? = null
-
-    //Global variables for places
-    private var placeLatLng: LatLng? = null
-    private var placeName: String? = null
-    private var placeId: String? = null
-    private var placeAddress: String? = null
+    private var selectedPlace: Place? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_event, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialise()
     }
 
@@ -161,14 +153,13 @@ class EditEventFragment : Fragment() {
         saveButton!!.setOnClickListener {
             updateEvent()
         }
-        //startMap()
+        startMap()
         initializePlaces()
     }
 
     private fun getEventFromFirestore() {
         eventDocument!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e(TAG, "eventDocument.get():success")
                 event = task.result!!.toObject(Event::class.java)
 
                 titleEditText!!.setText(event?.title)
@@ -178,12 +169,10 @@ class EditEventFragment : Fragment() {
                 endTimeEditText!!.setText(event?.end_time)
                 descriptionEditText!!.setText(event?.description)
 
-                placeLatLng = LatLng(event!!.latitude, event!!.longitude)
-
-                startMap()
+                mapFragment.placeMarkerOnMap(MapMarker(event!!.title, LatLng(event!!.latitude, event!!.longitude)))
+                mapFragment.animateToLocation(event!!.latitude, event!!.longitude)
             }
             else {
-                Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
                     getString(R.string.msg_fetch_event_from_server_unsucessful),
@@ -200,7 +189,7 @@ class EditEventFragment : Fragment() {
         endDate = endDateEditText!!.editableText.toString()
         startTime = startTimeEditText!!.editableText.toString()
         endTime = endTimeEditText!!.editableText.toString()
-        address = placeName.toString()
+        address = selectedPlace?.name
 
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(startDate) &&
             !TextUtils.isEmpty(endDate) && !TextUtils.isEmpty(startTime) &&
@@ -213,12 +202,11 @@ class EditEventFragment : Fragment() {
                 "start_time" to startTime,
                 "end_time" to endTime,
                 "description" to description,
-                "latitude" to placeLatLng!!.latitude,
-                "longitude" to placeLatLng!!.longitude,
+                "latitude" to selectedPlace!!.latLng!!.latitude,
+                "longitude" to selectedPlace!!.latLng!!.longitude,
                 "location" to address
             )).addOnCompleteListener(activity!!) { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "update:success")
                     Toast.makeText(
                         activity,
                         getString(R.string.msg_event_updated_sucess),
@@ -226,7 +214,6 @@ class EditEventFragment : Fragment() {
                     ).show()
                 }
                 else {
-                    Log.d(TAG, "update:failure", task.exception)
                     Toast.makeText(
                         activity,
                         getString(R.string.msg_event_update_unsucessful),
@@ -243,6 +230,7 @@ class EditEventFragment : Fragment() {
         }
     }
 
+
     private fun initializePlaces() {
 
         val apiKey = getString(R.string.google_maps_key)
@@ -251,40 +239,27 @@ class EditEventFragment : Fragment() {
         }
         placesClient = Places.createClient(context!!)
 
-        var autocompleteSupportFragment: AutocompleteSupportFragment =
+        val autocompleteSupportFragment: AutocompleteSupportFragment =
             childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
 
-        autocompleteSupportFragment.setPlaceFields(
-            Arrays.asList(
-                Place.Field.ID, Place.Field.LAT_LNG,
-                Place.Field.NAME
-            ))
+        autocompleteSupportFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME))
 
         autocompleteSupportFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
 
-            override fun onPlaceSelected(place: Place) {
+            override fun onPlaceSelected(selectedPlace: Place) {
 
-                placeLatLng = place.latLng
-                placeName = place.name
-                placeId = place.id
-                placeAddress = place.address
+                this@EditEventFragment.selectedPlace = selectedPlace
 
-                startMap()
-
-                Log.e("PlaceApi","onPlaceSelected: "+placeLatLng?.latitude+"\n"+placeLatLng?.longitude)
+                mapFragment.placeMarkerOnMap(MapMarker(title = selectedPlace.name!!, location = selectedPlace.latLng))
+                mapFragment.animateToLocation(selectedPlace.latLng!!.latitude, selectedPlace.latLng!!.longitude)
             }
 
-            override fun onError(p0: Status) {
-                Log.e("PlaceApi", "Error") //To change body of created functions use File | Settings | File Templates.
+            override fun onError(status: Status) {
             }
         })
     }
 
     private fun startMap() {
-        val args = Bundle()
-        args.putParcelable("placeLatLng", placeLatLng)
-        mapFragment.arguments = args
-
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()

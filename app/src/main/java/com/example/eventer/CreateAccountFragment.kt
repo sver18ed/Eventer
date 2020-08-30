@@ -1,7 +1,6 @@
 package com.example.eventer
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -9,17 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.eventer.models.hideKeyboard
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreateAccountFragment : Fragment() {
-
-    private val TAG = "CreateAccountFragment"
 
     //Fragments
     private val mainFragment = MainFragment()
@@ -111,7 +106,6 @@ class CreateAccountFragment : Fragment() {
         auth!!.createUserWithEmailAndPassword(email!!, password!!)
             .addOnCompleteListener(activity!!) { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "createUserWithEmail:success")
                     val userId = auth!!.currentUser!!.uid
                     //update user profile information
                     val currentUserDb = usersCollection!!.document(email!!)
@@ -126,7 +120,6 @@ class CreateAccountFragment : Fragment() {
                     loginUser()
                     updateUI()
                 } else {
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         activity!!,
                         getString(R.string.msg_create_user_failed),

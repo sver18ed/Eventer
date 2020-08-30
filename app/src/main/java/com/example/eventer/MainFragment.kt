@@ -1,6 +1,5 @@
 package com.example.eventer
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
+import com.example.eventer.models.MapMarker
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -37,6 +37,7 @@ class MainFragment : Fragment() {
 
     //Global variables
     private var listOfEvents: ArrayList<Event>? = null
+    private var mapMarkers: ArrayList<MapMarker>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +76,7 @@ class MainFragment : Fragment() {
 
         populateEventsListView()
 
-        //startMap()
+        startMap()
 
         createEventButton!!.setOnClickListener {
             if (currentUser == null) {
@@ -112,13 +113,18 @@ class MainFragment : Fragment() {
     }
 
     private fun populateEventsListView() {
+        var mapMarker: MapMarker
         eventsCollection!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.e(TAG, "eventsCollection.get():success")
                 listOfEvents = ArrayList()
+                mapMarkers = ArrayList()
                 for (e in task.result!!) {
                     val event = e.toObject(Event::class.java)
                     listOfEvents!!.add(event)
+
+                    mapMarker = MapMarker(title = event.title, location = LatLng(event.latitude, event.longitude))
+                    mapFragment.placeMarkerOnMap(mapMarker)
                 }
                 val adapter = ArrayAdapter(
                     activity!!,
@@ -126,7 +132,6 @@ class MainFragment : Fragment() {
                     listOfEvents!!
                 )
                 eventsListView?.adapter = adapter
-                startMap()
             }
             else {
                 Log.e(TAG, "eventsCollection.get():failure", task.exception)
@@ -140,15 +145,6 @@ class MainFragment : Fragment() {
     }
 
     private fun startMap() {
-        val args = Bundle()
-
-        val locations = ArrayList<LatLng>()
-        for (event in listOfEvents!!) {
-            locations.add(LatLng(event.latitude, event.longitude))
-        }
-        args.putParcelableArrayList("locations", locations)
-        mapFragment.arguments = args
-
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()

@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     MapFragment.OnFragmentInteractionListener {
 
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onFragmentInteraction(uri: Uri) = Unit
 
     private val TAG = "MainActivity"
 
@@ -101,14 +99,14 @@ class MainActivity : AppCompatActivity(),
             R.id.nav_profile -> {
                 if (auth!!.currentUser == null){
                     Toast.makeText(this, "Login to see your profile", Toast.LENGTH_SHORT).show()
-                    val fragmentTransaction = fragmentManager!!.beginTransaction()
-                    fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.replace(R.id.myFragment, loginFragment)
                     fragmentTransaction.addToBackStack(null)
                     fragmentTransaction.commit()
                 } else {
                     val args = Bundle()
                     args.putString("email", currentUser!!.email)
-                    viewProfileFragment!!.arguments = args
+                    viewProfileFragment.arguments = args
 
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.myFragment, viewProfileFragment)
@@ -118,8 +116,8 @@ class MainActivity : AppCompatActivity(),
             }
 
             R.id.nav_login -> {
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.myFragment, loginFragment)
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }

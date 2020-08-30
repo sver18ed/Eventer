@@ -12,11 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.hideKeyboard
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 class LoginFragment : Fragment() {
-
-    private val TAG = "LoginFragment"
 
     //Fragments
     private val mainFragment = MainFragment()
@@ -74,16 +71,11 @@ class LoginFragment : Fragment() {
         email = emailEditText?.text.toString()
         password = passwordEditText?.text.toString()
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            Log.d(TAG, "Logging in user.")
             auth!!.signInWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener(activity!!) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success")
                         updateUI()
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.e(TAG, "signInWithEmail:failure", task.exception)
                         Toast.makeText(
                             activity!!,
                             getString(R.string.msg_login_auth_failed),
@@ -101,10 +93,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun updateUI() {
-
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myFragment, mainFragment)
         fragmentTransaction.commit()
-        //activity!!.recreate()
     }
 }

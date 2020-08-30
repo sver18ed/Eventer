@@ -2,7 +2,6 @@ package com.example.eventer
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -14,8 +13,8 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.eventer.models.MapMarker
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.Place.Field.NAME
@@ -31,8 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateEventFragment : Fragment() {
-
-    private val TAG = "CreateEventFragment"
 
     private lateinit var placesClient: PlacesClient
 
@@ -67,14 +64,7 @@ class CreateEventFragment : Fragment() {
     private var endTime: String? = null
     private var description: String? = null
     private var address: String? = null
-
-
-    //Global variables for places
-    private var placeLatLng: LatLng? = null
-    private var placeName: String? = null
-    private var placeId: String? = null
-    private var placeAddress: String? = null
-
+    private var selectedPlace: Place? = null
 
 
     override fun onCreateView(
@@ -82,13 +72,11 @@ class CreateEventFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_event, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialise()
     }
 
@@ -108,13 +96,11 @@ class CreateEventFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
 
-
         val dateFormat = "yyyy.MM.dd"
         val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.ENGLISH)
         val simpleTimeFormat = SimpleDateFormat("HH.mm")
 
         startDateEditText!!.setText(SimpleDateFormat(dateFormat).format(System.currentTimeMillis()))
-        //startTimeEditText!!.setText(SimpleTimeFormat("").format(System.currentTimeMillis()))
 
         val calendar = Calendar.getInstance()
         var dateEditText: EditText? = null
@@ -165,14 +151,12 @@ class CreateEventFragment : Fragment() {
                 true).show()
         }
 
-
         saveButton!!.setOnClickListener {
             createNewEvent()
         }
         startMap()
         initializePlaces()
     }
-
 
     private fun createNewEvent() {
         id = eventsCollection!!.document().id
@@ -182,8 +166,7 @@ class CreateEventFragment : Fragment() {
         startTime = startTimeEditText?.text.toString()
         endTime = endTimeEditText?.text.toString()
         description = descriptionEditText?.text.toString()
-        address = placeName.toString()
-
+        address = selectedPlace?.name
 
         if (currentUser == null) {
             val fragmentTransaction = fragmentManager!!.beginTransaction()
@@ -205,8 +188,8 @@ class CreateEventFragment : Fragment() {
                 "end_time" to endTime,
                 "description" to description,
                 "created_by" to currentUser!!.email,
-                "latitude" to placeLatLng!!.latitude,
-                "longitude" to placeLatLng!!.longitude,
+                "latitude" to selectedPlace!!.latLng!!.latitude,
+                "longitude" to selectedPlace!!.latLng!!.longitude,
                 "location" to address
             )
 
@@ -215,10 +198,8 @@ class CreateEventFragment : Fragment() {
                     eventsCollection!!.document(id!!).update(
                         "participants", FieldValue.arrayUnion(currentUser!!.email)
                     )
-                    Log.e(TAG, "createEvent:success")
                     updateUI()
                 } else {
-                    Log.e(TAG, "createEvent:failure", task.exception)
                     Toast.makeText(
                         activity,
                         getString(R.string.msg_event_not_created),
@@ -256,33 +237,24 @@ class CreateEventFragment : Fragment() {
         val autocompleteSupportFragment: AutocompleteSupportFragment =
             childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
 
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, NAME))
+        autocompleteSupportFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.LAT_LNG, NAME))
 
         autocompleteSupportFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener{
 
-            override fun onPlaceSelected(place: Place) {
+            override fun onPlaceSelected(selectedPlace: Place) {
 
-                placeLatLng = place.latLng
-                placeName = place.name
-                placeId = place.id
-                placeAddress = place.address
+                this@CreateEventFragment.selectedPlace = selectedPlace
 
-                startMap()
-
-                Log.e("PlaceApi","onPlaceSelected: "+placeLatLng?.latitude+"\n"+placeLatLng?.longitude)
+                mapFragment.placeMarkerOnMap(MapMarker(title = selectedPlace.name!!, location = selectedPlace.latLng))
+                mapFragment.animateToLocation(selectedPlace.latLng!!.latitude, selectedPlace.latLng!!.longitude)
             }
 
-            override fun onError(p0: Status) {
-                Log.e("PlaceApi", "Error") //To change body of created functions use File | Settings | File Templates.
+            override fun onError(status: Status) {
             }
         })
     }
 
     private fun startMap() {
-        val args = Bundle()
-        args.putParcelable("placeLatLng", placeLatLng)
-        mapFragment.arguments = args
-
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()

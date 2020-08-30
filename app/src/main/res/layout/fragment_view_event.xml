@@ -114,7 +114,7 @@
         android:id="@+id/test_map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/join_button"
+        app:layout_constraintBottom_toTopOf="@id/guideline_horizontal_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_centre" />
@@ -126,6 +126,7 @@
         android:layout_marginBottom="20sp"
         android:text="@string/join"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_in_center"
         app:layout_constraintStart_toStartOf="parent" />
@@ -137,6 +138,7 @@
         android:layout_marginBottom="20sp"
         android:text="@string/leave"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_in_center"
         app:layout_constraintStart_toStartOf="parent" />
@@ -148,6 +150,7 @@
         android:layout_marginBottom="20sp"
         android:text="@string/edit"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_horizontal_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline_vertical_in_center" />
 
@@ -156,6 +159,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintGuide_percent="0.5"
+        android:orientation="horizontal"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.9"
         android:orientation="horizontal"/>
 
     <androidx.constraintlayout.widget.Guideline
