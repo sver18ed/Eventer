@@ -61,5 +61,5 @@
     <string name="msg_enter_email">Skriv in en epost-adress.</string>
     <string name="msg_enter_valid_email">Skriv in en giltig epost-adress.</string>
     <string name="msg_enter_password">Skriv in ett lösenord med minst 6 tecken.</string>
-    <string name="msg_create_user_failed">Autentisering misslyckades. Kontrollera så den ifyllda epost-adressen är unik och att lösenordet innehåller minst 6 tecken.</string>
+    <string name="msg_create_user_failed">"Den angivna e-post-adressen används redan. "</string>
 </resources>

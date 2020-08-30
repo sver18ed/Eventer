@@ -60,6 +60,6 @@
     <string name="msg_enter_email">Please enter an email-address.</string>
     <string name="msg_enter_valid_email">Please enter a valid email-address.</string>
     <string name="msg_enter_password">Please enter a password with at least 6 characters.</string>
-    <string name="msg_create_user_failed">Authentication failed. Check if the email address entered is unique and that the password has at least 6 characters.</string>
+    <string name="msg_create_user_failed">E-mail already in use. Please use a different e-mail for your account.</string>
 
 </resources>
