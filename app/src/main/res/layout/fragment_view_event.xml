@@ -131,6 +131,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/leave_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20sp"
+        android:text="@string/leave"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_in_center"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/edit_event_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

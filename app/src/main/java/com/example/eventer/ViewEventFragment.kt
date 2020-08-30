@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.contains
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.eventer.models.Event
@@ -39,6 +40,7 @@ class ViewEventFragment : Fragment() {
     private var participantsText: TextView? = null
     private var editEventButton: Button? = null
     private var joinEventButton: Button? = null
+    private var leaveEventButton: Button? = null
 
     //Firebase references
     private var firestore: FirebaseFirestore? = null
@@ -84,6 +86,7 @@ class ViewEventFragment : Fragment() {
         participantsText = view!!.findViewById(R.id.participants_text)
         editEventButton = view!!.findViewById(R.id.edit_event_button)
         joinEventButton = view!!.findViewById(R.id.join_button)
+        leaveEventButton = view!!.findViewById(R.id.leave_button)
 
         firestore = FirebaseFirestore.getInstance()
         eventsCollection = firestore!!.collection("events")
@@ -94,6 +97,7 @@ class ViewEventFragment : Fragment() {
         editEventButton!!.isVisible = currentUser != null
 
         getEventFromFirestore()
+
 
         participantsListView!!.setOnItemClickListener { _, _, position, _ ->
 
@@ -139,13 +143,6 @@ class ViewEventFragment : Fragment() {
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
             }
-            else if (participants!!.contains(currentUser!!.email)) {
-                Toast.makeText(
-                    activity,
-                    getString(R.string.msg_already_joined_event),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
             else {
                 eventsCollection!!.document(event!!.id).update(
                     "participants", FieldValue.arrayUnion(currentUser!!.email)
@@ -157,12 +154,52 @@ class ViewEventFragment : Fragment() {
                             getString(R.string.msg_join_event_successful),
                             Toast.LENGTH_SHORT
                         ).show()
+                        refreshParticipantsListView()
+                        leaveButtonVisible()
                     }
                     else {
                         Log.d(TAG, "join:failure", task.exception)
                         Toast.makeText(
                             activity,
                             getString(R.string.msg_join_event_unsucessful),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        leaveEventButton!!.setOnClickListener {
+            if (currentUser == null) {
+                Toast.makeText(
+                    activity,
+                    getString(R.string.msg_login_to_leave_event),
+                    Toast.LENGTH_SHORT
+                ).show()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myFragment, loginFragment!!)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }
+            else {
+                eventsCollection!!.document(event!!.id).update(
+                    "participants", FieldValue.arrayRemove(currentUser!!.email)
+                ).addOnCompleteListener(activity!!) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "leave:success")
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.msg_leave_event_sucessful),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        refreshParticipantsListView()
+                        joinButtonVisible()
+                    }
+                    else {
+                        Log.d(TAG, "leave:failure", task.exception)
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.msg_leave_event_unsucessful),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -190,6 +227,15 @@ class ViewEventFragment : Fragment() {
                 participantsText!!.text = participants!!.size.toString() + " " + getString(R.string.participants)
 
                 populateParticipantsListView()
+
+                if (event!!.created_by != currentUser!!.email){
+                    editEventButton!!.visibility = View.GONE
+                }
+                if (participants!!.contains(currentUser!!.email)){
+                    leaveButtonVisible()
+                } else {
+                    joinButtonVisible()
+                }
 
                 placeLatLng = LatLng(event!!.latitude, event!!.longitude)
                 Log.e("MapFragment", "place: Lat: "+placeLatLng!!.latitude+" Long: "+placeLatLng!!.longitude)
@@ -225,5 +271,32 @@ class ViewEventFragment : Fragment() {
         val transaction = fragmentManager!!.beginTransaction()
         transaction.replace(R.id.test_map, mapFragment)
         transaction.commit()
+    }
+    private fun refreshParticipantsListView() {
+        eventDocument!!.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.e(TAG, "eventDocument.get():success")
+                event = task.result!!.toObject(Event::class.java)
+                participants = task.result!!.get("participants") as List<String>
+                participantsText!!.text = participants!!.size.toString() + " " + getString(R.string.participants)
+                populateParticipantsListView()
+            }
+            else {
+                Log.e(TAG, "eventDocument.get():failure", task.exception)
+                Toast.makeText(
+                    activity,
+                    getString(R.string.msg_fetch_event_from_server_unsucessful),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+    private fun joinButtonVisible(){
+        joinEventButton!!.visibility = View.VISIBLE
+        leaveEventButton!!.visibility = View.GONE
+    }
+    private fun leaveButtonVisible(){
+        joinEventButton!!.visibility = View.GONE
+        leaveEventButton!!.visibility = View.VISIBLE
     }
 }

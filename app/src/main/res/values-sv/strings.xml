@@ -62,4 +62,8 @@
     <string name="msg_enter_valid_email">Skriv in en giltig epost-adress.</string>
     <string name="msg_enter_password">Skriv in ett lösenord med minst 6 tecken.</string>
     <string name="msg_create_user_failed">"Den angivna e-post-adressen används redan. "</string>
+    <string name="leave">Lämna</string>
+    <string name="msg_login_to_leave_event">Logga in för att lämna eventet!</string>
+    <string name="msg_leave_event_sucessful">Du lämnade evenemanget!</string>
+    <string name="msg_leave_event_unsucessful">Det gick inte lämna evenemanget...</string>
 </resources>

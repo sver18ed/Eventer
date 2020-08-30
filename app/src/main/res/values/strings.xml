@@ -61,5 +61,9 @@
     <string name="msg_enter_valid_email">Please enter a valid email-address.</string>
     <string name="msg_enter_password">Please enter a password with at least 6 characters.</string>
     <string name="msg_create_user_failed">E-mail already in use. Please use a different e-mail for your account.</string>
+    <string name="leave">Leave</string>
+    <string name="msg_login_to_leave_event">Please login to leave the event!</string>
+    <string name="msg_leave_event_sucessful">You left the event!</string>
+    <string name="msg_leave_event_unsucessful">Unable to leave the event...</string>
 
 </resources>
