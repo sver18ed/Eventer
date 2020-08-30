@@ -16,7 +16,6 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewProfileFragment : Fragment() {
-    private val TAG = "ViewProfileFragment"
 
     //UI elements
     private var firstNameText: TextView? = null
@@ -66,7 +65,6 @@ class ViewProfileFragment : Fragment() {
     private fun getUserFromFirestore() {
         userDocument!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e(TAG, "eventDocument.get():success")
                 user = task.result!!.toObject(User::class.java)
 
                 firstNameText!!.text = user!!.firstName
@@ -75,7 +73,6 @@ class ViewProfileFragment : Fragment() {
 
             }
             else {
-                Log.e(TAG, "eventDocument.get():failure", task.exception)
                 Toast.makeText(
                     activity,
                     getString(R.string.msg_fetch_user_from_server_unsucessful),

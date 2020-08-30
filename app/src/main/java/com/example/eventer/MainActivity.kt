@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onFragmentInteraction(uri: Uri) = Unit
 
-    private val TAG = "MainActivity"
-
     //Fragments
     private val fragmentManager = supportFragmentManager
     private val mainFragment = MainFragment()
@@ -44,7 +42,6 @@ class MainActivity : AppCompatActivity(),
     private var currentUser: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.e(TAG, "onCreate()")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -87,7 +84,6 @@ class MainActivity : AppCompatActivity(),
         auth = FirebaseAuth.getInstance()
         currentUser = auth!!.currentUser
 
-        /* Display Main Fragment initially */
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.myFragment, mainFragment)
         transaction.commit()

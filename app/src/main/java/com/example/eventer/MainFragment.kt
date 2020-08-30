@@ -17,8 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MainFragment : Fragment() {
 
-    private val TAG = "MainFragment"
-
     //Fragments
     private var createEventFragment: Fragment? = null
     private var viewEventFragment: Fragment? = null
@@ -116,7 +114,6 @@ class MainFragment : Fragment() {
         var mapMarker: MapMarker
         eventsCollection!!.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e(TAG, "eventsCollection.get():success")
                 listOfEvents = ArrayList()
                 mapMarkers = ArrayList()
                 for (e in task.result!!) {
@@ -134,7 +131,6 @@ class MainFragment : Fragment() {
                 eventsListView?.adapter = adapter
             }
             else {
-                Log.e(TAG, "eventsCollection.get():failure", task.exception)
                 Toast.makeText(
                     activity,
                     getText(R.string.msg_fetch_list_events_from_server_unsucessful),
